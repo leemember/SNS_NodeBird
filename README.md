@@ -1,4 +1,6 @@
-# NodeBird SNS
+# 💌 NodeBird SNS
+
+<br>
 
 ## 😁 노드버드 프로젝트에 사용된 기술
 
