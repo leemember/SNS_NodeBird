@@ -32,3 +32,18 @@ AppLayout.propTypes = {
 
 여기에 쓰인 node는 retrun 안에 들어갈 수 있는 모든 것들이 노드라고한다.<br>
 쉽게 말해 화면에 그릴 수 있는 모든 것들!
+
+<br>
+3. Ant Design으로 화면 UI 구성하기
+
+> https://ant.design/
+
+> style-component를 사용하면 emotion을 공짜로 사용할 수 있다. <br> 서버 사이드 렌더링 할 때도 편리하다. <br>https://emotion.sh/docs/styled
+
+
+(1) 설치하기
+
+```
+$npm i styled-components antd @ant-design/icons
+```
+
