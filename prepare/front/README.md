@@ -21,3 +21,14 @@ npm i next@9
 ```
 npm i prop-types
 ```
+
+타입스크립트로 개발하는거면 prop-types가 필요 없지만, 우리는 자바스크립트로 하는 것이기 때문에 prop-types를 설치해줘야 한다.
+
+```
+AppLayout.propTypes = {
+    children: PropTypes.node.isRequired,
+};
+```
+
+여기에 쓰인 node는 retrun 안에 들어갈 수 있는 모든 것들이 노드라고한다.<br>
+쉽게 말해 화면에 그릴 수 있는 모든 것들!
