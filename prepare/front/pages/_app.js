@@ -11,7 +11,6 @@ const NodeBird = ({ Component }) => {
                 <meta charSet="utf-8"/>
                 <title>NodeBird</title>
             </Head>
-            <div>공통메뉴</div>
             <Component />
         </>
     )
