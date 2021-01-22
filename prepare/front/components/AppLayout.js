@@ -6,6 +6,8 @@ import styled from 'styled-components';
 
 import UserProfile from '../components/UserProfile';
 import LogginForm from '../components/LogginForm';
+import FollowList from './FollowList';
+import NicknameEditForm from './NicknameEditForm';
 
 const SearchInput = styled(Input.Search)`
     vertical-align : middle;
@@ -41,7 +43,8 @@ const AppLayout = ({ children }) => {
                 </Col>
 
                 <Col xs={24} md={12}>
-                    {children}
+                    <NicknameEditForm />
+                    <FollowList />
                 </Col>
 
                 <Col xs={24} md={6}>
