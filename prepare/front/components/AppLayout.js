@@ -36,7 +36,7 @@ const AppLayout = ({ children }) => {
 
             <Row gutter={8}>
                 <Col xs={24} md={6}>
-                    {isLoggedIn ? <UserProfile /> : <LogginForm />}
+                    {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn} /> : <LogginForm setIsLoggedIn={setIsLoggedIn} />}
                     {/* 로그인 되면 프로필을 보여줄거고, 로그인이 안되어있으면 로그인 폼을 보여줌 */}
                 </Col>
 
