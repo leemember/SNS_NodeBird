@@ -1,27 +1,51 @@
 import React, { useCallback, useState } from 'react'; 
 import Head from 'next/head';
-import { Form, Input } from 'antd';
+import { Form, Input, Checkbox, Button } from 'antd';
 import AppLayout from '../components/AppLayout';
+import useInput from '../hooks/useInput';
+import styled from 'styled-components';
+
+const ErrorMsg = styled.div`
+    color: red;
+`;
 
 const Signup = () => {
-    const [id, setId] = useState('');
-    const onChangeId = useCallback((e) => {
-        setId(e.target.value);
-    }, []);
+    const [id, onChangeId] = useInput('');
+    const [nickname, onChangeNickname] = useInput('');
+    const [password, onChangePassword] = useInput('');
+    
+    //비밀번호 체크    
+    //비밀번호가 맞는지 안맞는지 확인
+    const [passwordCheck, onChangePasswordCheck] = useState('');
+    const [passwordError, setPasswordError] = useState(false);
+    const onChangePasswordCheck = useCallback(() => {
+        setPasswordCheck(e.target.value);
+        setPasswordError(e.target.value !== password);
+    }, [password]);
 
-    const [nickname, setNickname] = useState('');
-    const onChangeNickname = useCallback((e) => {
-        setNickname(e.target.value);
-    }, []);
 
-    const [password, setPassword] = useState('');
-    const onChangePassword = useCallback((e) => {
-        setPassword(e.target.value);
-    }, []);
+    //약관 동의
+    //체크박스를 체크on,체크off 해주는 기능
+    const [term, setTerm] = useInput('');
+    const [termError, setTermError] = useState(false);
+    const onChangeTerm = useCallback((e) => {
+        setTerm(e.target.checked);
+        setTermError(false);
+    }, [])
+
+    //위와 같이 비밀번호체크, 약관동의는 중복되는 부분이 달라서 커스텀 훅으로 합쳐주지 못했다.
 
     const onSubmit = useCallback(() => {
-
-    }, []);
+        if (password !== passwordCheck) {
+            return setPasswordError(true);
+        }
+        if(!term) {
+            return setTermError(true);
+        }
+        console.log(id, nickname, password);
+    }, [password, passwordCheck, term]);
+    // 위에서도 한번 체크했지만 한 번 더 체크해주면 좋다.
+    // 서버 쪽에서도 한번 더 체크해주면 좋다.
 
     return (
         <>
@@ -30,7 +54,7 @@ const Signup = () => {
         </Head>
 
         <AppLayout>
-            <Form onFinish={onFinish}>
+            <Form onFinish={onSubmit}>
                 <div>
                     <label htmlFor="user-id">아이디</label>
                     <br />
@@ -56,6 +80,18 @@ const Signup = () => {
                         required
                         onChange={onChangePasswordCheck}
                     />
+                    {passwordError && <ErrorMsg>비밀번호가 일치하지 않습니다.</ErrorMsg>}
+                </div>
+                <div>
+                    <Checkbox name="user-term" checked={term} onChange={onChangeTerm}>
+                        현주 말을 잘 들을 것을 동의합니다.
+                    </Checkbox>
+                    {termError && <ErrorMsg>약관에 동의하셔야 합니다.</ErrorMsg>}
+                </div>  
+                {/*termError는 언제 true가 되냐면 제출할 때 */}
+
+                <div style={{margintTop: 10}}>
+                    <Button type="primary" htmlType="submit">가입하기</Button>
                 </div>
             </Form>
         </AppLayout>
