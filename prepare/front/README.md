@@ -221,6 +221,43 @@ https://chrome.google.com/webstore/category/extensions?hl=ko
 - 컴포넌트 디자인 라이브러리 : https://ant.design/
 - 차트 라이브러리 : https://echarts.apache.org/examples/en/index.html
 
-### <b>프로필 페이지 만들기</b>
+### <b>프로필 화면 만들기</b>
 
+[components] 디렉토리
+- NicknameEditForm.js
+- UserProfile.js
 
+생성
+
+- 컴포넌트가 100줄이 넘어가면 더 잘게잘게 자르는게 좋다.
+
+### <b>회원가입 화면 만들기</b>
+
+```
+const [id, setId] = useState('');
+    const onChangeId = useCallback((e) => {
+        setId(e.target.value);
+    }, []);
+
+    const [password, setPassword] = useState('');
+    const onChangePassword = useCallback((e) => {
+        setPassword(e.target.value);
+    }, []);
+
+    const onSubmitForm = useCallback(() => {
+        console.log(id, password);
+        setIsLoggedIn(true);
+    }, [id, password]);
+```
+
+이렇게 반복되는 코드를 최적화 하기 위해 커스텀 Hooks을 만들면 된다.
+훅의 특징은 반복문이나 조건문 함수에서는 안되고
+컴포넌트 안에서는 된다. 유일학 예외가 커스텀 훅이다.
+
+--------------
+
+[hooks] 디렉토리 생성
+- useInput.js
+
+LoginForm이나 signup에서 중복되는 코드들이 있는데
+그 부분을 커스텀훅을 이용해서 컴포턴트 코드 분량을 최적화 해주면 된다.

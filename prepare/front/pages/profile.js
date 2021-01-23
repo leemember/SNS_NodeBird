@@ -7,13 +7,13 @@ import FollowList from '../components/FollowList';
 
 
 const Profile = () => {
-    const followingList = [{nickname: '이현주'}, {nickname: '애플'}, {nickname: '테슬라'}];
-    const followerList = [{nickname: '이현주'}, {nickname: '애플'}, {nickname: '테슬라'}];
+  // 더미데이터
+    const followingList = [{nickname: '이현주'}, {nickname: '사과'}, {nickname: '애플'}];
+    const followerList = [{nickname: '이현주'}, {nickname: '사과'}, {nickname: '애플'}];
 
     return (
       <>
         <Head>
-            <meta charSet="utf-8"/>
             <title>내 프로필 | NodeBird</title>
         </Head>
 
