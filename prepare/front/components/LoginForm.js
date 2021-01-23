@@ -16,16 +16,7 @@ const FormWrapper = styled(Form)`
 const LoginForm = ({ setIsLoggedIn }) => {
     const [id, onChangeId] = useInput('');
     const [password, onChangePassword] = useInput('');
-
-    const [id, setId] = useState('');
-    const onChangeId = useCallback((e) => {
-        setId(e.target.value);
-    }, []);
-
-    const [password, setPassword] = useState('');
-    const onChangePassword = useCallback((e) => {
-        setPassword(e.target.value);
-    }, []);
+    //커스텀훅으로 간단하게 처리함. 보기도 편하다.
 
     const onSubmitForm = useCallback(() => {
         console.log(id, password);
