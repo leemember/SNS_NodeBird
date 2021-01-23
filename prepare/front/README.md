@@ -85,7 +85,7 @@ ant 홈페이지에서 마음에 드는 UI를 고르고 컴포넌트에 적용�
 > > xs={24} md={12}는 (50%) <br>
 > > 1번째 Col이랑 2번재 Col이랑 같은 줄에 있게 만드려면 최소 둘의 합계가 24 이하가 되야한다. 13, 13 하면 둘이 합쳐서 26이 되버리니까 24가 넘어 따로 따로 세로로 배치된다.
 > >
-> > > 여기서 gutter란 컬럼 사이에 간격을 주는 것이다.
+> > > 여기서 gutter란 컬럼 사이에 간격을 주는 것이다. (패딩역할을 한다.)
 > > >
 > > > > a태그에 있는 target으로 새창을 띄울 때는 rel="noreferrer noopener"을 꼭 넣어줘야 보안 위험에 있어서 예방할 수 있다.
 
@@ -115,6 +115,97 @@ ant 홈페이지에서 마음에 드는 UI를 고르고 컴포넌트에 적용�
 😀 해결법 : styled-components를 사용하여 그 해당 객체만 리렌더링 되게 하는 방법도 있고, useMemo를 사용하여 리렌더링 하는 방법이 있다.
 
 ### <b>더미 데이터로 로그인하기</b>
+
+```
+<ButtonWrapper>
+    <Button type="primary" htmlType="submit" loading={false}>로그인</Button>
+    <Link href="/signup"><a><Button>회원가입</Button></a></Link>
+</ButtonWrapper>
+```
+
+버튼 부분에다가 htmlType="submit"을 붙혀줘야 Form태그에 submit이 되는데, 또 Form태그에다가 
+
+```
+ onFinish={onSubmitForm}
+```
+를 해줘야지 onFinish가 호출이 된다. 
+onFinish는 자동으로 e.preventDefault가 이미 적용되어있다.
+그리고 antd 디자인에서는 사용하면 안된다!
+
+
+#### LoginForm.js
+```
+const LoginForm = ({ setIsLoggedIn }) => {
+    const [id, setId] = useState('');
+    const onChangeId = useCallback((e) => {
+        setId(e.target.value);
+    }, []);
+
+    const [password, setPassword] = useState('');
+    const onChangePassword = useCallback((e) => {
+        setPassword(e.target.value);
+    }, []);
+
+    const onSubmitForm = useCallback(() => {
+        console.log(id, password);
+        setIsLoggedIn(true);
+    }, [id, password]);
+
+    (...)
+
+}
+```
+
+로그인폼 Props에 setIsLoggedIn를 해주고, onSubmitForm 함수에 데이터 값을 넘겨주면 로그인을 해주겠다고 setIsLoggedIn(true); 코드를 추가해준다.
+이 데이터값은 이전에 만든 AppLayout.js에 더미데이터로 로그인 폼에다가 넘겨준다.
+
+
+로그인을 하는 순간 isLoggedIn이 로그인을 하는순간 트루로 바뀌면서 UseProfile로 바뀌게 된다. 서버가 없어도 가짜로 로그인을 시켜줄 수 있다는 것임 (백엔드 없어도 가상 스테이지 만드는 것이다.)
+
+
+#### UserProfile.js
+
+```
+<Card
+    actions={[
+        <div key="twit">짹짹<br />0</div>,
+        <div key="follwings">팔로잉<br />0</div>,
+        <div key="follwings">팔로워<br />0</div>
+    ]}
+>
+    <Card.Meta 
+        avatar={<Avatar>HJ</Avatar>}
+        title="hyunju"
+    />
+    <Button onClick={onLogOut}>로그아웃</Button>
+</Card>
+```
+
+위에 Card 컴포넌트에서 actions는 배열이기 때문에 각 div태그에 key값을 붙혀줘야한다. 리액트에서는 배열에서 꼭 키 값 적용해주기.
+
+```
+const UserProfile = ({ setIsLoggedIn }) => {
+    const onLogOut = useCallback(() => {
+        setIsLoggedIn(false);
+    }, []);
+    //로그아웃 누르면 풀리게하는 동작
+```
+
+코드 상단쪽에는 이렇게 useCallback으로 setIsLoggedIn(false); 를 false로 해주어야 로그아웃을 누르면 원래 상태로 돌아온다.
+
+이거는 다시 AppLayout.js 큰 틀의 레이아웃 컴포넌트에 가서
+
+```
+ {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn}/> : <LoginForm setIsLoggedIn={setIsLoggedIn} />}
+ ```
+
+ 로그아웃 버튼을 누를 때 다시 원상태로 돌아오는 동작이 가능하도록 
+
+ ```
+setIsLoggedIn={setIsLoggedIn}
+ ```
+
+ 이 코드를 적용시켜준다.
 
 ### <b>프로필 페이지 만들기</b>
 
