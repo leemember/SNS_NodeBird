@@ -207,6 +207,20 @@ setIsLoggedIn={setIsLoggedIn}
 
  이 코드를 적용시켜준다.
 
+### 크롬 확장 프로그램
+
+#### chrome 웹스토어에서 설치할 확장 프로그램 추천
+<br>
+https://chrome.google.com/webstore/category/extensions?hl=ko
+- react Developer Tools
+- redux DeveTools
+- Mobx DeveTools
+
+#### 라이브러리 추천
+
+- 컴포넌트 디자인 라이브러리 : https://ant.design/
+- 차트 라이브러리 : https://echarts.apache.org/examples/en/index.html
+
 ### <b>프로필 페이지 만들기</b>
 
 
