@@ -336,6 +336,10 @@ $npm i redux
 
 #### **리덕스의 원리**
 
+![zz](https://user-images.githubusercontent.com/71499150/105668483-bd08e100-5f20-11eb-807f-5144f84dad15.JPG)
+
+**store란 이 그림에 묶여져있는 state랑 reducer가 포함한게 store라고 한다.**
+
 <br>
 
 - 중앙저장소를 만들면 각 컴포넌트에서 다 필요로 할 때 꺼내서 쓸 수가 있다.
