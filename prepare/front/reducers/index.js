@@ -1,4 +1,6 @@
-//중앙저장소 = 리덕스
+import { HYDRATE } from 'next-redux-wrapper';
+
+// 중앙 저장소 = 리덕스
 const initialState = {
     // 예시 2
     user : {
@@ -22,7 +24,7 @@ export const loginAction = (data) => {
 
 export const logoutAction = () => {
     return {
-        type: 'LOG_OUT',
+        type: 'LOG_OUT'
         // 로그아웃은 데이터가 필요 없으니 DATA를 없애도 된다.
     }
 }
@@ -31,6 +33,9 @@ export const logoutAction = () => {
 // 액션 하나 만들 때마다 CASE문이 계속 길어지는데 이런 점도 리듀서를 쪼갤 수가 있다.
 const rootReducer = (state = initialState, action ) => {
     switch (action.type) {
+        case HYDRATE:
+            console.log('HYDRATE', action);
+            return {...state, ...action.payload};
         //로그인
         case 'LOG_IN':
             return {
@@ -51,6 +56,8 @@ const rootReducer = (state = initialState, action ) => {
                     user: null
                 }
             }
+            default:
+                return state;
       }
 };
 
