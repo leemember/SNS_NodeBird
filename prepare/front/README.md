@@ -123,17 +123,18 @@ ant 홈페이지에서 마음에 드는 UI를 고르고 컴포넌트에 적용�
 </ButtonWrapper>
 ```
 
-버튼 부분에다가 htmlType="submit"을 붙혀줘야 Form태그에 submit이 되는데, 또 Form태그에다가 
+버튼 부분에다가 htmlType="submit"을 붙혀줘야 Form태그에 submit이 되는데, 또 Form태그에다가
 
 ```
  onFinish={onSubmitForm}
 ```
-를 해줘야지 onFinish가 호출이 된다. 
+
+를 해줘야지 onFinish가 호출이 된다.
 onFinish는 자동으로 e.preventDefault가 이미 적용되어있다.
 그리고 antd 디자인에서는 사용하면 안된다!
 
-
 #### LoginForm.js
+
 ```
 const LoginForm = ({ setIsLoggedIn }) => {
     const [id, setId] = useState('');
@@ -159,9 +160,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
 로그인폼 Props에 setIsLoggedIn를 해주고, onSubmitForm 함수에 데이터 값을 넘겨주면 로그인을 해주겠다고 setIsLoggedIn(true); 코드를 추가해준다.
 이 데이터값은 이전에 만든 AppLayout.js에 더미데이터로 로그인 폼에다가 넘겨준다.
 
-
 로그인을 하는 순간 isLoggedIn이 로그인을 하는순간 트루로 바뀌면서 UseProfile로 바뀌게 된다. 서버가 없어도 가짜로 로그인을 시켜줄 수 있다는 것임 (백엔드 없어도 가상 스테이지 만드는 것이다.)
-
 
 #### UserProfile.js
 
@@ -173,7 +172,7 @@ const LoginForm = ({ setIsLoggedIn }) => {
         <div key="follwings">팔로워<br />0</div>
     ]}
 >
-    <Card.Meta 
+    <Card.Meta
         avatar={<Avatar>HJ</Avatar>}
         title="hyunju"
     />
@@ -197,19 +196,20 @@ const UserProfile = ({ setIsLoggedIn }) => {
 
 ```
  {isLoggedIn ? <UserProfile setIsLoggedIn={setIsLoggedIn}/> : <LoginForm setIsLoggedIn={setIsLoggedIn} />}
- ```
+```
 
- 로그아웃 버튼을 누를 때 다시 원상태로 돌아오는 동작이 가능하도록 
+로그아웃 버튼을 누를 때 다시 원상태로 돌아오는 동작이 가능하도록
 
- ```
+```
 setIsLoggedIn={setIsLoggedIn}
- ```
+```
 
- 이 코드를 적용시켜준다.
+이 코드를 적용시켜준다.
 
 ### 크롬 확장 프로그램
 
 #### chrome 웹스토어에서 설치할 확장 프로그램 추천
+
 <br>
 https://chrome.google.com/webstore/category/extensions?hl=ko
 - react Developer Tools
@@ -224,6 +224,7 @@ https://chrome.google.com/webstore/category/extensions?hl=ko
 ### <b>프로필 화면 만들기</b>
 
 [components] 디렉토리
+
 - NicknameEditForm.js
 - UserProfile.js
 
@@ -254,10 +255,102 @@ const [id, setId] = useState('');
 훅의 특징은 반복문이나 조건문 함수에서는 안되고
 컴포넌트 안에서는 된다. 유일학 예외가 커스텀 훅이다.
 
---------------
+---
 
 [hooks] 디렉토리 생성
+
 - useInput.js
 
 LoginForm이나 signup에서 중복되는 코드들이 있는데
 그 부분을 커스텀훅을 이용해서 컴포턴트 코드 분량을 최적화 해주면 된다.
+
+<br>
+
+## 6. Redux 연동하기
+
+<br>
+
+### **라이브러리 설치하기**
+
+> 버전 6으로 설치
+
+```
+$npm i next-redux-wrapper
+$npm i redux
+```
+
+리덕스는 대부분 app.js에서 retrun 값들을 감싸주는 태그에
+
+```
+<Provider store={store}>
+```
+를 넣는데, next를 사용 한다면 이 부분이 생략된다.
+
+<br>
+
+### **😎 리덕스란 ?**
+
+<br>
+
+<로그인 폼이나, 회원가입 페이지, 프로필 페이지> 이런 부분에 공통적인 데이터가 있다. 
+
+바로 로그인 한 사람들의 정보가 이런 페이지들에 쓰일 텐데 로그인 여부 닉네임 정보 등등
+
+여러 컴포넌트에서 공통적으로 쓰이는 데이터들이 각각 컴포넌트가 있어서 데이터들이 흩어져있다. 
+
+근데 이런 과정들이 매번 수동적으로 각각의 컴포넌트 마다 
+각각의 데이터들을 만들어 주는게 귀찮기 때문에 이런 점들을 
+중앙에서 하나로 관리해서 컴포넌트에 뿌려주는 <b>중앙 데이터 저장소</b> 역할을 하는 것을 <b>리덕스</b>라고 한다.
+
+>이를 통해서 컴포넌트가 필요로 할 때 전체적으로 가져오거나 부분적으로 가져오거나 할 수 있다. 
+
+<br>
+
+### **😎 중앙데이터저장소 역할 해주는 라이브러리**
+
+- context API
+- 리덕스
+- mobx
+- graphQL
+
+이 네 가지 선택지 중에 어떻게 골라야되는가 ?
+규모가 어느정도 된다면 중앙 데이터 저장소 하나쯤은 꼭 필수다.
+가장 많이 선택하는 순서 리덕스고 그 다음이 mobx다.
+그리고 프로젝트가 좀 간단하다 싶으면 context API를 사용하면 된다.
+
+
+#### **리덕스의 장점**
+
+- 원리가 매우 간단하기 때문에 에러가 덜 난다.
+- 에러가 추적이 가능해서 앱이 안정적이다.
+- 코드량이 많아진다.
+- 비동기가 가능하다. (서버에서 데이터를 가져오는 것은 항상 비동기임)
+- 비동기를 다룰 때는 항상 실패를 대비해야한다
+- 리듀서로 쪼갤 수 있어서 리덕스의 규모가 크면 세분화가 가능
+
+> 비동기의 3단계 1. 데이터 요청, 2. 성공해서 받는거, 3.실패하는 경우
+>> 요청, 성공, 실패 이렇게 3단계는 무조건 직접 구현해야한다.
+
+<br>
+
+#### **리덕스의 원리**
+
+<br>
+
+- 중앙저장소를 만들면 각 컴포넌트에서 다 필요로 할 때 꺼내서 쓸 수가 있다.
+
+- 데이터를 조회,수정,추가,삭제도 가능하다.
+
+- 리덕스에서는 데이터를 바꾸려면 액션action을 꼭 필수로 만들어줘야한다. 
+
+- 디스패치하면 데이터의 값이 바뀌는데 이걸 디스패치한다고 바로 바뀌는 것이 아니라 리듀서를 해줘야지 바뀐다는 점.
+
+- 리덕스 쓰면 액션 하나하나가 기록되기 떄문에 액션들만 쫙 놓고 보면 데이터들이 어떻게 바꿔왔는지 그게 다 추적이 되서 버그찾기가 쉽다. 중간에 데이터가 잘못 변화하는 부분을 포착이 된다면 그 부분만 찾아서 오류난 부분들을 쉽게 수정할 수 있다. 
+
+- 리덕스 dev tool 을 사용하면 데이터를 뒤로 돌렸다가 다시 앞으로 감았다가 등등 히스토리를 통해 자유자재로 작업이 가능하다. (로그인하고 또 로그인 풀고 이 과정임)
+
+#### **객체를 새로 만들어 주는 이유**
+
+- 객체를 새로 만들어야 변경 내역이 추적된다.
+
+
