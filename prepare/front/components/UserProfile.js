@@ -1,9 +1,14 @@
 import React, { useCallback } from 'react';
 import {Card, Avatar, Button} from 'antd';
+import { useDispatch } from 'react-redux';
 
-const UserProfile = ({ setIsLoggedIn }) => {
+import { logoutAction } from '../reducers';
+
+const UserProfile = () => {
+    const dispatch = useDispatch();
+
     const onLogOut = useCallback(() => {
-        setIsLoggedIn(false);
+        dispatch(logoutAction);
     }, []);
     //로그아웃 누르면 풀리게하는 동작
 

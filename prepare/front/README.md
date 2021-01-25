@@ -277,6 +277,7 @@ LoginForm이나 signup에서 중복되는 코드들이 있는데
 ```
 $npm i next-redux-wrapper
 $npm i redux
+$npm i react-redux
 ```
 
 리덕스는 대부분 app.js에서 retrun 값들을 감싸주는 태그에

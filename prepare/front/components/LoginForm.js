@@ -1,9 +1,12 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import { Form, Input, Button } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+//리덕스 쓰면 useState 쓸 일이 많이 줄어든다.
+
 import useInput from '../hooks/useInput';
+import { loginAction } from '../reducers';
 
 const ButtonWrapper = styled.div`
     margin-top: 10px;
@@ -13,14 +16,15 @@ const FormWrapper = styled(Form)`
     padding: 10px;
 `;
 
-const LoginForm = ({ setIsLoggedIn }) => {
+const LoginForm = () => {
+    const dispatch = useDispatch();
     const [id, onChangeId] = useInput('');
     const [password, onChangePassword] = useInput('');
     //커스텀훅으로 간단하게 처리함. 보기도 편하다.
 
     const onSubmitForm = useCallback(() => {
         console.log(id, password);
-        setIsLoggedIn(true);
+        dispatch(loginAction({ id, password })); // 데이터 가져오기.
     }, [id, password]);
 
     return (
@@ -49,10 +53,6 @@ const LoginForm = ({ setIsLoggedIn }) => {
             </ButtonWrapper>
         </FormWrapper>
     );
-}
-
-LoginForm.propTypes = {
-    setIsLoggedIn: PropTypes.func.isRequired,
 }
 
 export default LoginForm;

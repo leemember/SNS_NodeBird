@@ -1,38 +1,55 @@
+//중앙저장소 = 리덕스
 const initialState = {
-    name: 'hyunju',
-    age: 25,
-    password: 'hyun1111'
+    // 예시 2
+    user : {
+        isLoggedIn: false,
+        user: null,
+        signUpDate: {},
+        loginData: {},
+    },
+    post : {
+        mainPosts: [],
+    }
 }
-// 위에같은 초기값 state 를 바꾸고 싶으면 action을 만들어서 밑에 데이터 값으로 바꿔준다.
+// 위에같은 초기값 state를 바꾸고 싶으면 action을 만들어서 밑에 데이터 값으로 바꿔준다.
 
-// 데이터는 매번 새로 생성해줄 수 없으니까 data를 받아서 동적으로 계속 바꿔준다.(= action creator)
-const changeNickname = (data) => {
+export const loginAction = (data) => {
     return {
-        type: 'CHANGE_NICKNAME',
+        type: 'LOG_IN',
         data,
     }
-};
-changeNickname('hyunjulee');
-/*
-    {
-        type: 'CHANGE_NICKNAME',
-        data: 'hyunjulee' <= (저 괄호안에 들어있는 값과 동일)
+}
+
+export const logoutAction = () => {
+    return {
+        type: 'LOG_OUT',
+        // 로그아웃은 데이터가 필요 없으니 DATA를 없애도 된다.
     }
-*/
-store.dispatch(changeNickname('leehyunju'));
-
-/*
-    이렇게 dispatch 하면 어떤 액션이든지 그 자리에서 바로 즉흥적으로 만들어줘서 디스패치 해줄 수 있는 것이다.
-*/
-
+}
 
 // (이전상태, 액션) => 다음상태 | 이전상태와 액션을 통해서 다음상태를 만들어 낸다.
+// 액션 하나 만들 때마다 CASE문이 계속 길어지는데 이런 점도 리듀서를 쪼갤 수가 있다.
 const rootReducer = (state = initialState, action ) => {
     switch (action.type) {
-        case 'CHANGE_NICKNAME':
+        //로그인
+        case 'LOG_IN':
             return {
-                ...state,
-                name: action.data,
+                ...state,                
+                user: {
+                    ...state.user,
+                    isLoggedIn:true,
+                    user: action.data
+                }
+            }
+        //로그아웃
+        case 'LOG_OUT':
+            return {
+                ...state,                
+                user: {
+                    ...state.user,
+                    isLoggedIn:false,
+                    user: null
+                }
             }
       }
 };
