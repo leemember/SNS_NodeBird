@@ -18,6 +18,7 @@ const Signup = () => {
     //비밀번호가 맞는지 안맞는지 확인
     const [passwordCheck, setPasswordCheck] = useState('');
     const [passwordError, setPasswordError] = useState(false);
+
     const onChangePasswordCheck = useCallback((e) => {
         setPasswordCheck(e.target.value);
         setPasswordError(e.target.value !== password);
@@ -26,8 +27,9 @@ const Signup = () => {
 
     //약관 동의
     //체크박스를 체크on,체크off 해주는 기능
-    const [term, setTerm] = useInput('');
+    const [term, setTerm] = useState('');
     const [termError, setTermError] = useState(false);
+
     const onChangeTerm = useCallback((e) => {
         setTerm(e.target.checked);
         setTermError(false);
