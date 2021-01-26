@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 //리덕스 쓰면 useState 쓸 일이 많이 줄어든다.
 
 import useInput from '../hooks/useInput';
-import { loginAction } from '../reducers';
+import { loginAction } from '../reducers/user';
 
 const ButtonWrapper = styled.div`
     margin-top: 10px;
