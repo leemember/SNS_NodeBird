@@ -8,7 +8,7 @@ const UserProfile = () => {
     const dispatch = useDispatch();
 
     const onLogOut = useCallback(() => {
-        dispatch(logoutAction);
+        dispatch(logoutAction());
     }, []);
     //로그아웃 누르면 풀리게하는 동작
 

@@ -6,7 +6,7 @@ const initialState = {
     user : {
         isLoggedIn: false,
         user: null,
-        signUpDate: {},
+        signUpData: {},
         loginData: {},
     },
     post : {
