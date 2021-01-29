@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import { Card, Popover, Avatar, Button} from 'antd';
+import { Card, Popover, Avatar, Button, List, Comment} from 'antd';
 import { RetweetOutlined, HeartOutlined, MessageOutlined, EllipsisOutlined, HeartTwoTone } from '@ant-design/icons';
 
 import PostImages from './PostImages';
+import CommentForm from './CommentForm';
 
 const PostCard = ({ post }) => {
     const [ liked, setLiked ] = useState(false);
@@ -57,7 +58,7 @@ const PostCard = ({ post }) => {
                  ]}
             >
                 <Card.Meta 
-                    avatar={<Avatar>{post.User.nickName[0]}</Avatar>}
+                    avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
                     title={post.User.nickname}
                     description={post.content}
                 />
@@ -65,7 +66,22 @@ const PostCard = ({ post }) => {
 
             {commentFormOpened && (
                 <div>
-                    댓글 부분
+                    <CommentForm post={post}/>
+                    {/* 게시글의 아이디를 받아와야하기 때문에 post를 넘겨주었다. */}
+                    <List 
+                        header={`${post.Comments.length}개의 댓글`}
+                        itemLayout="horizontal"
+                        dataSource={post.Comments}
+                        renderItem={(item) => (
+                            <li>
+                                <Comment 
+                                    author={item.nickname}
+                                    avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
+                                    content={item.content}
+                                />
+                            </li>
+                        )}
+                    />
                 </div>
             )}
 

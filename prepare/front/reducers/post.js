@@ -4,7 +4,7 @@ export const initialState = {
         id: 1,
         User: {
             id: 1,
-            nickName: '현주리',
+            nickname: '현주리',
         },
         content: '첫 번째 게시글 #해시태그 #익스프레스',
         Images: [
@@ -14,12 +14,12 @@ export const initialState = {
     ],
     Comments: [{
         User: {
-            nickName: 'hyunju'
+            nickname: 'hyunju'
         },
         content: '우와 재밌겠군요~',
     }, {
         User: {
-            nickName: 'lee',
+            nickname: 'lee',
         },
         content: '멋있네요'
     }]
@@ -42,7 +42,7 @@ const dummyPost = {
     content: '더미 데이터입니다.',
     User: {
         id: 1,
-        nickName:'현주리',
+        nickname:'현주리',
     },
     Images: [],
     Comments: [],
