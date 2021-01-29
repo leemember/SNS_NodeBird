@@ -9,8 +9,8 @@ export const initialState = {
         content: '첫 번째 게시글 #해시태그 #익스프레스',
         Images: [
         {src: 'https://usercontents-c.styleshare.io/images/38020339/640x-',},
-        {src: 'https://static.news.zumst.com/images/37/fe0a5bf48832451785bc3c35d4a9acba.jpg',},
-        {src: 'https://image.yes24.com/blogimage/blog/r/u/run2007/temp/still_07.jpg',}
+        {src: 'https://usercontents-c.styleshare.io/images/38020339/640x-',},
+        {src: 'https://usercontents-c.styleshare.io/images/38020339/640x-',},
     ],
     Comments: [{
         User: {
