@@ -409,3 +409,11 @@ $npm i redux-devtools-extension
 - post.js // 게시물용
 - user.js // 
 
+#### **리액트 슬릭**
+
+https://react-slick.neostack.com/
+
+```
+$npm i react-slick
+```
+

@@ -2,11 +2,17 @@ import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { PlusOutlined } from '@ant-design/icons';
 
+import ImagesZoom from './ImagesZoom';
+
 const PostImages = ({ images }) => { 
     const [showImagesZoom, setShowImagesZoom] = useState(false);
 
     const onZoom = useCallback(() => {
         setShowImagesZoom(true);
+    }, []);
+
+    const onClose = useCallback(() => {
+      setShowImagesZoom(false);
     }, []);
 
     //이미지 0개인 경우에는 왜 조건문이 없냐면
@@ -18,6 +24,7 @@ const PostImages = ({ images }) => {
         return (
             <>
               <img role="presentation" src={images[0].src} alt={images[0].src} onClick={onZoom} />
+              {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
             </>
             // 이미지를 클릭할 수 있게하면 장애인들이 헷갈려한다. 그래서 role 프레젠테이션을 넣어줘야한다.
         )
@@ -29,6 +36,7 @@ const PostImages = ({ images }) => {
             <>
               <img role="presentation" style={{width:'50%', display:'inline-block'}} src={images[0].src} alt={images[0].src} onClick={onZoom} />
               <img role="presentation" style={{width:'50%', display:'inline-block'}} src={images[1].src} alt={images[1].src} onClick={onZoom} />
+              {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
             </>
             // 이미지를 클릭할 수 있게하면 장애인들이 헷갈려한다. 그래서 role 프레젠테이션을 넣어줘야한다.
         )
@@ -51,6 +59,7 @@ const PostImages = ({ images }) => {
           개의 사진 더 보기
         </div>
        </div>
+       {showImagesZoom && <ImagesZoom images={images} onClose={onClose} />}
       </>
        
     )
