@@ -3,14 +3,14 @@ export const initialState = {
         //이 부분은 프론트가 백엔드한테 어떤식으로 개발 한건지 물어보고 협업하는 것이 좋다.
         id: 1,
         User: {
-            id: 1,
-            nickname: '현주리',
+          id: 1,
+          nickname: '현주리',
         },
         content: '첫 번째 게시글 #해시태그 #익스프레스',
         Images: [
         {src: 'https://usercontents-c.styleshare.io/images/38020339/640x-',},
-        {src: 'https://usercontents-c.styleshare.io/images/38020339/640x-',},
-        {src: 'https://usercontents-c.styleshare.io/images/38020339/640x-',},
+        {src: 'https://cdn.fanzeel.com/images/201906/5cff5ddc67935.jpg',},
+        {src: 'https://t1.daumcdn.net/cfile/tistory/1122D22F4C691BB395',},
     ],
     Comments: [{
         User: {
