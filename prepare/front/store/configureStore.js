@@ -7,8 +7,11 @@ import createSagaMiddleware from 'redux-saga';
 import reducer from '../reducers';
 import rootSaga from '../sagas';
 
+//액션이 디스패치 되는 것들을 로깅해주는 (?)
+//항상 미들웨어는 3단 고차함수를 사용한다. 
+//인자 -> next -> action
 const loggerMiddleware = ({ dispatch, getState }) => (next) => (action) => {
-  console.log(action);
+  console.log(action); // 액션을 실행하기 전에 콘솔로 한 번 찍어주기 = 이게 바로 미들웨어
   return next(action);
 }
 

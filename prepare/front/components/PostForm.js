@@ -31,7 +31,7 @@ const PostForm = () => {
             <Input.TextArea 
                 value={text}
                 onChange={onChangeText}
-                maxLengt={140}
+                maxLength={140}
                 placeholder="어떤 신기한 일이 있었나요?"            
             />
 
