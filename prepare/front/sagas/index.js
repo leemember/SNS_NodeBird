@@ -74,18 +74,27 @@ function* addPost(action) {
 
 //LOG_IN이란 액션이 실행되면 뒤에있는 logIn 제너레이터 함수가 실행되도록
 function* watchLogIn() {
-  yield take('LOG_IN_REQUEST', logIn);
-  //요청을 하나 로그인하나 같은거라구함.
+  while (true) {
+    yield take('LOG_IN_REQUEST', logIn);
+    //요청을 하나 로그인하나 같은거라구함.
+  }
 }
 //take : LOG_IN이라는 액션이 실행될 때까지 기다리겠다는 뜻이다.
 
 function* watchLogOut() {
-  yield take('LOG_OUT_REQUEST', logOut);
+  while (true){
+    yield take('LOG_OUT_REQUEST', logOut);
+  }
 }
 
 function* watchAddPost() {
-  yield take('ADD_POST_REQUEST', addPost);
+  while (true){
+    yield take('ADD_POST_REQUEST', addPost);
+  }
 }
+// 여기서 take는 일회성이다. 로그인 1번, 로그아웃 1번 하면 의미가 사라진다.
+// 그럼 게시물도 하나만 쓸 수 있는것임
+// 대신 while로 감싸면 무한하게 실행된다.
 
 export default function* rootSaga() {
   //saga에는 제너레이터 함수를 사용한다. function 뒤에 * 붙는 것으로 시작
