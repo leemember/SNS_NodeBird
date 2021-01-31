@@ -1,4 +1,4 @@
-import { all, call, folk, put, takeLatest, takeEvery } from 'redux-saga/effects';
+import { all, call, folk, put, takeLatest, takeEvery, throttle } from 'redux-saga/effects';
 // 항상 이펙트 앞에서는 yeild를 붙혀줘야한다. 그리고 yeild는 await과 비슷하다.
 import axios from 'axios';
 import { addPost } from '../reducers/post';
@@ -83,6 +83,8 @@ function* watchLogOut() {
   yield takeLatest('LOG_OUT_REQUEST', logOut);
 }
 
+// 얘는 몇초에 한 번 올려주는 것이다.
+// 요청이 너무 많아서 DOS 공격을 할 것 같다면 throttle을 쓰면 좋다.
 function* watchAddPost() {
   yield takeLatest('ADD_POST_REQUEST', addPost);
 }
@@ -90,6 +92,8 @@ function* watchAddPost() {
 // 그럼 게시물도 하나만 쓸 수 있는것임
 // 대신 while로 감싸면 무한하게 실행된다. 이 작업까지 해주면 진정한 이벤트 리스너같이 실행되는 것이다.
 // 근데 while문을 쓰면 또 코드가 길어지니까 takeEvery라는 함수를 쓰면 적절하다.
+// takeLatest : 마우스가 두 번 눌렀다고 인식 되는 경우, takeEvery에는 두 번이나 실행된다. 게시물 올릴 때 두번 클릭하면 같은 게시물이 두개 올라가게 된다.
+//그래서 얘takeLatest 를 사용하면 마지막것만 알아서 실행하게 해준다. 앞에꺼 다 무시해줌 (100번 눌러도 100번째 누른거만 실행해주고 앞에 99개는 다 무시 -_ㅎ)
 
 export default function* rootSaga() {
   //saga에는 제너레이터 함수를 사용한다. function 뒤에 * 붙는 것으로 시작
