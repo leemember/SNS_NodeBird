@@ -438,9 +438,15 @@ $npm i react-slick
 split을 쓸 때는 괄호로 해시태그까지 감싸야 해시태그까지 전부 포함이 된다.
 모르면 그냥 구글링 ㄱㄱ
 
-## Redux-saga 연동하기
+<br>
 
-### 😏 1. redux-thunk 이해하기
+----------
+
+<br>
+
+## 😏 Redux-saga 연동하기
+
+### 1. redux-thunk 이해하기
 
 리덕스의 미들웨어로서 리덕스의 기능을 향상시켜주는 기능이다. 
 이 강좌에서는 사가를 사용하는데 그냥 이건 미들웨어 소개하는 김에 대충 이해하는 걸로 !
@@ -470,3 +476,39 @@ $npm i next-redux-saga
 ```
 
 위에 두 가지를 설치해주기
+
+```
+export default function* rootSaga() {
+  //saga에는 제너레이터 함수를 사용한다.
+  //function 뒤에 * 붙는 것으로 시작
+}
+```
+
+```
+let i = 0;
+const gen = function*() {
+  while (true) {
+    yield i++;
+  }
+}
+```
+이걸로 무한 이벤트 리스너를 만들 수 있다.
+다른 개념들은 
+> https://github.com/leemember/redux18
+
+여기서 다시 읽어보고 복습하기 🤨
+
+<br>
+
+### 사가 이팩트 기능
+> https://redux-saga.js.org/docs/api/
+
+<br>
+
+#### 자주 사용하는 것들 !
+
+- put : 디스패치 해주는 기능, 액션을 디스패치 해줌
+- all : 배열에 들어있는 것들을 동시에 실행해준다. 
+- folk, call : 함수를 실행한다는 뜻.
+- folk : 비동기 함수 호출
+- call : 동기 함수 호출
