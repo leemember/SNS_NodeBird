@@ -1,4 +1,4 @@
-import { all, call, folk, put, take, } from 'redux-saga/effects';
+import { all, call, folk, put, takeLatest, takeEvery } from 'redux-saga/effects';
 // 항상 이펙트 앞에서는 yeild를 붙혀줘야한다. 그리고 yeild는 await과 비슷하다.
 import axios from 'axios';
 import { addPost } from '../reducers/post';
@@ -74,27 +74,22 @@ function* addPost(action) {
 
 //LOG_IN이란 액션이 실행되면 뒤에있는 logIn 제너레이터 함수가 실행되도록
 function* watchLogIn() {
-  while (true) {
-    yield take('LOG_IN_REQUEST', logIn);
-    //요청을 하나 로그인하나 같은거라구함.
-  }
+  yield takeLatest('LOG_IN_REQUEST', logIn);
+  //요청을 하나 로그인하나 같은거라구함.
 }
 //take : LOG_IN이라는 액션이 실행될 때까지 기다리겠다는 뜻이다.
 
 function* watchLogOut() {
-  while (true){
-    yield take('LOG_OUT_REQUEST', logOut);
-  }
+  yield takeLatest('LOG_OUT_REQUEST', logOut);
 }
 
 function* watchAddPost() {
-  while (true){
-    yield take('ADD_POST_REQUEST', addPost);
-  }
+  yield takeLatest('ADD_POST_REQUEST', addPost);
 }
 // 여기서 take는 일회성이다. 로그인 1번, 로그아웃 1번 하면 의미가 사라진다.
 // 그럼 게시물도 하나만 쓸 수 있는것임
-// 대신 while로 감싸면 무한하게 실행된다.
+// 대신 while로 감싸면 무한하게 실행된다. 이 작업까지 해주면 진정한 이벤트 리스너같이 실행되는 것이다.
+// 근데 while문을 쓰면 또 코드가 길어지니까 takeEvery라는 함수를 쓰면 적절하다.
 
 export default function* rootSaga() {
   //saga에는 제너레이터 함수를 사용한다. function 뒤에 * 붙는 것으로 시작

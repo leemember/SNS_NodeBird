@@ -512,3 +512,34 @@ const gen = function*() {
 - folk, call : 함수를 실행한다는 뜻.
 - folk : 비동기 함수 호출
 - call : 동기 함수 호출
+
+<br>
+
+[sagas]-[index.js]
+
+```
+function* watchLogIn() {
+  yield takeLatest('LOG_IN_REQUEST', logIn);
+}
+
+function* watchLogOut() {
+  yield takeLatest('LOG_OUT_REQUEST', logOut);
+}
+
+function* watchAddPost() {
+  yield takeLatest('ADD_POST_REQUEST', addPost);
+}
+
+// 🤪 take : 일회성이다. 로그인 1번, 로그아웃 1번 하면 의미가 사라진다.
+// 그럼 게시물도 하나만 쓸 수 있는것임
+// 🤪 while로 감싸면 무한하게 실행된다. 이 작업까지 해주면 진정한 이벤트 리스너같이 실행되는 것이다.
+// 근데 while문을 쓰면 또 코드가 길어지니까 takeEvery라는 함수를 쓰면 적절하다.
+// 🤪 takeLatest : 마우스가 두 번 눌렀다고 인식 되는 경우, takeEvery에는 두 번이나 실행된다.
+// 게시물 올릴 때 두번 클릭하면 같은 게시물이 두개 올라가게 된다.
+// 🤪 takeLatest : 얘 사용하면 마지막 것만 알아서 실행하게 해준다.
+// 앞에꺼 다 무시해줌 (100번 눌러도 100번째 누른거만 실행해주고 앞에 99개는 다 무시 -_ㅎ)
+
+
+결론 : takeLatest를 자주 사용한다.
+
+```
