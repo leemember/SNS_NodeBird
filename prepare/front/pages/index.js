@@ -6,8 +6,8 @@ import PostForm from '../components/PostForm';
 import PostCard from '../components/PostCard';
 
 const Home = () => {
-    const { isLoggedIn } = useSelector((state) => state.user);
-    const { mainPosts } = useSelector((state) => state.post);
+    const { isLoggedIn } = useSelector(state => state.user);
+    const { mainPosts } = useSelector(state => state.post);
     return(
         <AppLayout>
             {/* 로그인 한 사람들만 볼 수 있게 처리하기 */}

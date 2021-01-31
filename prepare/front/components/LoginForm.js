@@ -2,11 +2,11 @@ import React, { useCallback } from 'react';
 import { Form, Input, Button } from 'antd';
 import Link from 'next/link';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 //리덕스 쓰면 useState 쓸 일이 많이 줄어든다.
 
 import useInput from '../hooks/useInput';
-import { loginAction } from '../reducers/user';
+import { loginRequestAction } from '../reducers/user';
 
 const ButtonWrapper = styled.div`
     margin-top: 10px;
@@ -18,13 +18,14 @@ const FormWrapper = styled(Form)`
 
 const LoginForm = () => {
     const dispatch = useDispatch();
+    const { isLoggingIn } = useSelector((state) => state.user);
     const [id, onChangeId] = useInput('');
     const [password, onChangePassword] = useInput('');
     //커스텀훅으로 간단하게 처리함. 보기도 편하다.
 
     const onSubmitForm = useCallback(() => {
         console.log(id, password);
-        dispatch(loginAction({ id, password })); // 데이터 가져오기.
+        dispatch(loginRequestAction({ id, password })); // 데이터 가져오기.
     }, [id, password]);
 
     return (
@@ -48,7 +49,7 @@ const LoginForm = () => {
             </div>
 
             <ButtonWrapper>
-                <Button type="primary" htmlType="submit" loading={false}>로그인</Button>
+                <Button type="primary" htmlType="submit" loading={isLoggingIn}>로그인</Button>
                 <Link href="/signup"><a><Button>회원가입</Button></a></Link>
             </ButtonWrapper>
         </FormWrapper>

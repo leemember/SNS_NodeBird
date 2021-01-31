@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Slick from 'react-slick';
-import {Overlay, Global, CloseBtn, ImgWrapper, Indicator, SlickWrapper} from './styles';
+import {Overlay, Global, CloseBtn, ImgWrapper, Indicator, SlickWrapper, Header} from './styles';
 
 
 // 여기서 props에 담긴 images가 undefined가 뜬다면 부모가 잘못된 것이니 props를 잘 봐주면 된다.
