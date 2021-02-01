@@ -1,24 +1,27 @@
-import React, {useCallback, useState, useRef} from 'react';
+import React, {useCallback, useState, useRef, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, Input } from 'antd';
 import { addPost } from '../reducers/post';
+import useInput from '../hooks/useInput';
 
 const PostForm = () => {
-    const { imagePaths } = useSelector((state) => state.post);
+    const { imagePaths, addPostDone } = useSelector((state) => state.post);
     const dispatch = useDispatch();
     // 실제 돔에 접근하기 위해서 Ref를 쓴다.
-    const imageInput = useRef();
-    const [text, setText] = useState('');
-    const onChangeText = useCallback((e)=> {
-        setText(e.target.value);
-    }, []);
+    const [text, onChangeText, setText] = useInput('');
+    
+    useEffect(() => {
+      if (addPostDone) {
+        setText('');
+      }
+    }, [addPostDone]);
 
     //짹짹 버튼을 눌렀을 때 게시물일 달리게끔 하는 기능이다. post리듀서에 있는 addPost를 디스패치 시켜주면 된다.
     // 그리고 dispatch 자리에는 원래 객체가 들어가는 것이 맞다.
+    const imageInput = useRef();
     const onSubmit = useCallback(()=> {
-        dispatch(addPost);
-        setText(''); // 짹쨱 눌렀을 때 남겨진 텍스트 없애주기.
-    }, []);
+        dispatch(addPost(text));
+    }, [text]);
 
     // 이렇게 하면 이미지업로드 버튼을 누르면 사진을 띄울 수가 있다.
     const onClickImageUpload = useCallback(() => {

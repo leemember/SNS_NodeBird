@@ -4,13 +4,18 @@ import { Form, Input, Checkbox, Button } from 'antd';
 import AppLayout from '../components/AppLayout';
 import useInput from '../hooks/useInput';
 import styled from 'styled-components';
+import { SIGN_UP_REQUEST } from '../reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
 
 const ErrorMsg = styled.div`
     color: red;
 `;
 
 const Signup = () => {
-    const [id, onChangeId] = useInput('');
+    const dispatch = useDispatch();
+    const { signUpLoading } = useSelector((state) => state.user);
+
+    const [email, onChangeEmail] = useInput('');
     const [nickname, onChangeNickname] = useInput('');
     const [password, onChangePassword] = useInput('');
     
@@ -44,9 +49,13 @@ const Signup = () => {
         if(!term) {
             return setTermError(true);
         }
-        console.log(id, nickname, password);
+        console.log(email, nickname, password);
+        dispatch({
+          type: SIGN_UP_REQUEST,
+          data: { email, password, nickname },
+        });
         //서버쪽으로 잘 넘어가나 콘솔로도 확인하기.
-    }, [password, passwordCheck, term]);
+    }, [email, password, passwordCheck, term]);
     // 위에서도 한번 체크했지만 한 번 더 체크해주면 좋다.
     // 서버 쪽에서도 한번 더 체크해주면 좋다.
 
@@ -58,9 +67,9 @@ const Signup = () => {
             
             <Form onFinish={onSubmit}>
                 <div>
-                    <label htmlFor="user-id">아이디</label>
+                    <label htmlFor="user-email">이메일</label>
                     <br />
-                    <Input name="user-id" value={id} required onChange={onChangeId} />
+                    <Input name="user-email" type="email" value={email} required onChange={onChangeEmail} />
                 </div>
 
                 <div>
@@ -97,7 +106,7 @@ const Signup = () => {
                 {/*termError는 언제 true가 되냐면 제출할 때 */}
 
                 <div style={{margintTop: 10}}>
-                    <Button type="primary" htmlType="submit">가입하기</Button>
+                    <Button type="primary" htmlType="submit" loading={signUpLoading}>가입하기</Button>
                 </div>
             </Form>
         </AppLayout>

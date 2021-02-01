@@ -27,7 +27,7 @@ const Global = createGlobalStyle`
 `;
 
 const AppLayout = ({ children }) => {
-    const {isLoggedIn} = useSelector((state) => state.user);
+    const { me } = useSelector((state) => state.user);
 
     return(
         <div>
@@ -52,7 +52,7 @@ const AppLayout = ({ children }) => {
 
             <Row gutter={8}>
                 <Col xs={24} md={6}>
-                    {isLoggedIn ? <UserProfile/> : <LoginForm />}
+                    {me ? <UserProfile/> : <LoginForm />}
                     {/* 로그인 되면 프로필을 보여줄거고, 로그인이 안되어있으면 로그인 폼을 보여줌 */}
                 </Col>
 
