@@ -1,6 +1,18 @@
 import { all, fork, takeLatest, put, delay} from 'redux-saga/effects';
 import axios from 'axios';
 
+import {
+  LOG_IN_SUCCESS, 
+  LOG_IN_REQUEST, 
+  LOG_IN_FAILURE, 
+  LOG_OUT_SUCCESS, 
+  LOG_OUT_REQUEST, 
+  LOG_OUT_FAILURE,
+  SIGN_UP_SUCCESS, 
+  SIGN_UP_REQUEST, 
+  SIGN_UP_FAILURE
+} from '../reducers/user';
+
 // -------로그인---------
 function logInAPI(data) {
   return axios.post('/api/login', data); 
@@ -16,13 +28,13 @@ function* logIn(action) {
     yield delay(1000);
     // 🤯 서버 구현하기 전까지 delay 사용하는걸로
     yield put({
-      type: 'LOG_IN_SUCCESS', //성공시
+      type: LOG_IN_SUCCESS, //성공시
       data: action.data, //데이터를 받아온다.
     });
   } catch (err) {
     yield put({
-      type: 'LOG_IN_FAILURE',
-      data: err.response.data,
+      type: LOG_IN_FAILURE,
+      error: err.response.data,
     })
   }  
 }
@@ -40,28 +52,56 @@ function* logOut() {
     yield delay(1000);
     // 🤯 서버 구현하기 전까지 delay 사용하는걸로
     yield put({
-      type: 'LOG_OUT_SUCCESS',
+      type: LOG_OUT_SUCCESS,
     });
   } catch (err) {
     yield put({
-      type: 'LOG_OUT_FAILURE',
-      data: err.response.data,
+      type: LOG_OUT_FAILURE,
+      error: err.response.data,
+    })
+  }  
+}
+
+// ------------------------------------------------
+
+function signUpAPI() {
+  return axios.post('/api/signUp'); 
+}
+
+function* signUp() {  
+  try {
+    // const result = yield call(signUp);
+    yield delay(1000);
+    // 🤯 서버 구현하기 전까지 delay 사용하는걸로
+    // throw new Error(''); throw를 하면 에러날 때 바로 밑에 put함수를 적용해주는 것이 아니라 catch(err)로 간다.
+    yield put({
+      type: SIGN_UP_SUCCESS,
+    });
+  } catch (err) {
+    yield put({
+      type: SIGN_UP_FAILURE,
+      error: err.response.data,
     })
   }  
 }
 
 //LOG_IN이란 액션이 실행되면 뒤에있는 logIn 제너레이터 함수가 실행되도록
 function* watchLogIn() {
-  yield takeLatest('LOG_IN_REQUEST', logIn);
+  yield takeLatest(LOG_IN_REQUEST, logIn);
 }
 
 function* watchLogOut() {
-  yield takeLatest('LOG_OUT_REQUEST', logOut);
+  yield takeLatest(LOG_OUT_REQUEST, logOut);
+}
+
+function* watchSignUp() {
+  yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 
 export default function* userSaga() {
   yield all([
     fork(watchLogIn),
     fork(watchLogOut),
+    fork(watchSignUp),
   ])
 }

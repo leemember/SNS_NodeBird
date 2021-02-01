@@ -27,18 +27,30 @@ export const initialState = {
   // 다른 정보와 관련이 있는 데이터면 그 정보를 한 번에 합쳐준다. 합쳐줄 때는 대문자가 되어 나온다.
   }],
   imagePaths: [], // 이미지 업로드 할 때 이미지 경로들이 저장되는 곳이다.
-  postAdded: false, // 게시될 것들이 추가가 완료됐을 때
+  addPostLoading: false, // 게시될 것들이 추가가 완료됐을 때
+  addPostDone: false,
+  addPostError: null,
 }
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 
+//댓글구현
+export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
+export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
+export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
+
 
 // 액션 이름을 상수로 빼주면 좋은 것이 타입과 케이스에 그대로 재활용 할 수 있다. 중간에 오타날 경우를 예방 함.
-export const addPost = {
-    type: ADD_POST,
-}
+export const addPost = (data) => ({
+    type: ADD_POST_REQUEST,
+    data,
+})
+export const addComment = (data) => ({
+    type: ADD_COMMENT_REQUEST,
+    data,
+})
 
 const dummyPost = {
   id:2,
@@ -53,13 +65,46 @@ const dummyPost = {
 
 const reducer = (state = initialState, action ) => {
   switch (action.type) {
-    case ADD_POST:
+    case ADD_POST_REQUEST:
       return {
         ...state,
-        mainPosts: [dummyPost, ...state.mainPosts],
-        //여기서 dummyPost이 함수는 앞에다 추가해야 게시물을 추가했을 때 가장 위에 뜬다.
-        postAdded: true
+        addPostLoading: true,
+        addPostDone: false,
+        addPostError: null
       }
+      case ADD_POST_SUCCESS:
+        return {
+          ...state,
+          mainPosts: [dummyPost, ...state.mainPosts],
+          addPostLoading: false,
+          addPostDone: true
+        }
+        case ADD_POST_FAILURE:
+          return {
+            ...state,
+            addPostLoading: false,
+            addPostError: action.error,
+          }
+    case ADD_COMMENT_REQUEST:
+      return {
+        ...state,
+        addCommentLoading: true,
+        addCommentDone: false,
+        addCommentError: null
+      }
+      case ADD_COMMENT_SUCCESS:
+        return {
+          ...state,
+          addCommentLoading: false,
+          addCommentDone: true
+        }
+        case ADD_COMMENT_FAILURE:
+          return {
+            ...state,
+            addCommentLoading: false,
+            addCommentError: action.error,
+          }
+
       default:
         return state;
   }
