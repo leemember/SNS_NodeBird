@@ -41,13 +41,17 @@ export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 
+export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
+export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
+
+
 const dummyUser = (data) => ({
   ...data,
   nickname : '이현주',
   id: 1,
-  Posts: [],
-  Followings: [],
-  Followers: [],
+  Posts: [{ id: 1}],
+  Followings: [{nickname:'혀주'}, {nickname:'hj lee'}, {nickname: 'hjl'}], //팔로잉 팔로우 수가 3으로 늘음
+  Followers: [{nickname:'혀주'}, {nickname:'hj lee'}, {nickname: 'hjl'}], //팔로잉 팔로우 수가 3으로 늘음
 })
 //시퀄라이즈에서 합쳐주기 때문에 첫문자는 댓문자로.
 
@@ -159,6 +163,24 @@ switch (action.type) {
       ...state,
       changeNicknameLoading:false, // 요청이 끝났으니까 false
       changeNicknameError: action.error,
+    }
+  case ADD_POST_TO_ME :
+    return {
+      ...state,
+      me: {
+        ...state.me,
+        Posts: [{ id: action.data}, ...state.me.Posts],
+        //게시글 썻을때 게시글 아이디가 일로 들어와서 하나 더 추가가 될 것이다.
+      }
+    }
+  case REMOVE_POST_OF_ME :
+    return {
+      ...state,
+      me: {
+        ...state.me,
+        Posts: state.me.Posts.filter((v) => v.id !== action.data),
+        //게시글 썻을때 게시글 아이디가 일로 들어와서 하나 더 추가가 될 것이다.
+      }
     }
   default:
     return state;

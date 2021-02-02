@@ -10,18 +10,28 @@ export const initialState = {
     },
     content: '첫 번째 게시글 #해시태그 #익스프레스',
     Images: [
-      {src: 'https://usercontents-c.styleshare.io/images/38020339/640x-',},
-      {src: 'https://cdn.fanzeel.com/images/201906/5cff5ddc67935.jpg',},
-      {src: 'https://t1.daumcdn.net/cfile/tistory/1122D22F4C691BB395',},
+      {
+        id : shortId.generate(),
+        src: 'https://usercontents-c.styleshare.io/images/38020339/640x-',},
+      {
+        id : shortId.generate(),
+        src: 'https://cdn.fanzeel.com/images/201906/5cff5ddc67935.jpg',},
+      {
+        id : shortId.generate(),
+        src: 'https://t1.daumcdn.net/cfile/tistory/1122D22F4C691BB395',},
   ],
   Comments: [{
+    id : shortId.generate(),
     User: {
-        nickname: 'hyunju'
+      id : shortId.generate(),
+      nickname: 'hyunju'
     },
     content: '우와 재밌겠군요~',
   }, {
+    id : shortId.generate(),
     User: {
-        nickname: 'lee',
+      id : shortId.generate(), //대문자로 되어있는 애들은 서버에서 주는 애들이라 아이디가 고유하게 붙어있다.
+      nickname: 'lee',
     },
     content: '멋있네요'
   }]
@@ -35,11 +45,19 @@ export const initialState = {
   addCommentLoading: false, 
   addCommentDone: false,
   addCommentError: null,
+  removePostLoading: false, 
+  removePostDone: false,
+  removePostError: null,
 }
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+
+//삭제
+export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
+export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
+export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
 //댓글구현
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
@@ -59,8 +77,8 @@ export const addComment = (data) => ({
 
 //이렇게하면 동적으로 만들 수 있다. data함수로 만듬
 const dummyPost = (data) => ({
-  id:shortId.generate(),
-  content: data,
+  id: data.id,
+  content: data.content ,
   User: {
     id: 1,
     nickname:'현주리',
@@ -100,6 +118,30 @@ const reducer = (state = initialState, action ) => {
             addPostLoading: false,
             addPostError: action.error,
           };
+
+    // 삭제
+    case REMOVE_POST_REQUEST:
+      return {
+        ...state,
+        removePostLoading: true,
+        removePostDone: false,
+        removePostError: null
+      };
+      case REMOVE_POST_SUCCESS:
+        return {
+          ...state,
+          mainPosts: ...state.mainPosts.filter((v)=> v.id === action.data),
+          removePostLoading: false,
+          removePostDone: true
+        };
+        case REMOVE_POST_FAILURE:
+          return {
+            ...state,
+            removePostLoading: false,
+            removePostError: action.error,
+          };
+
+    // 댓글
     case ADD_COMMENT_REQUEST:
       return {
         ...state,
