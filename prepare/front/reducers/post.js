@@ -1,4 +1,5 @@
 import shortId from 'shortid';
+import produce from 'immer';
 
 export const initialState = {
   mainPosts: [{
@@ -78,7 +79,7 @@ export const addComment = (data) => ({
 //이렇게하면 동적으로 만들 수 있다. data함수로 만듬
 const dummyPost = (data) => ({
   id: data.id,
-  content: data.content ,
+  content: data.content,
   User: {
     id: 1,
     nickname:'현주리',
@@ -96,81 +97,69 @@ const dummyComment = (data) => ({
   },
 });
 
-const reducer = (state = initialState, action ) => {
+// immer : 이전 상태를 액션을 통해 다음 상태로 만들어내는 함수 (불변성은 지키면서)
+const reducer = (state = initialState, action ) => produce(state, (draft) => {
   switch (action.type) {
     case ADD_POST_REQUEST:
-      return {
-        ...state,
-        addPostLoading: true,
-        addPostDone: false,
-        addPostError: null
-      };
-      case ADD_POST_SUCCESS:
-        return {
-          ...state,
-          mainPosts: [dummyPost(action.data), ...state.mainPosts],
-          addPostLoading: false,
-          addPostDone: true
-        };
-        case ADD_POST_FAILURE:
-          return {
-            ...state,
-            addPostLoading: false,
-            addPostError: action.error,
-          };
+      draft.addPostLoading = true;
+      draft.addPostDone = false;
+      draft.addPostError = null;
+      break;
+
+    case ADD_POST_SUCCESS:
+      draft.addPostLoading = false;
+      draft.addPostDone = true;
+      draft.mainPosts = unshift(dummyComment(action.data));
+      break;
+
+    case ADD_POST_FAILURE:
+      draft.addPostLoading = false;
+      draft.addPostError = action.error;
+      break;
+
 
     // 삭제
     case REMOVE_POST_REQUEST:
-      return {
-        ...state,
-        removePostLoading: true,
-        removePostDone: false,
-        removePostError: null
-      };
-      case REMOVE_POST_SUCCESS:
-        return {
-          ...state,
-          mainPosts: state.mainPosts.filter((v)=> v.id !== action.data),
-          removePostLoading: false,
-          removePostDone: true
-        };
-        case REMOVE_POST_FAILURE:
-          return {
-            removePostLoading: false,
-            removePostError: action.error,
-          };
+      draft.removePostLoading = true;
+      draft.removePostDone = false;
+      draft.removePostError = null;
+      break;
+
+    case REMOVE_POST_SUCCESS:
+      draft.removePostLoading = false;
+      draft.removePostDone = true;
+      draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
+      break;
+
+    case REMOVE_POST_FAILURE:
+      draft.removePostLoading = false;
+      draft.removePostError = action.error;
+      break;
 
     // 댓글
     case ADD_COMMENT_REQUEST:
-      return {
-        ...state,
-        addCommentLoading: true,
-        addCommentDone: false,
-        addCommentError: null
-      };
-      case ADD_COMMENT_SUCCESS: {
-        const postIndex = state.mainPosts.findIndex((v)=> v.id === action.data.postId);
-        const post = { ...state.mainPosts[postIndex]  };
-        post.Comments = [dummyComment(action.data.content), ...post.Comments];
-        const mainPosts = [...state.mainPosts];
-        mainPosts[postIndex] = post;
-        return {
-          ...state,
-          mainPosts,
-          addCommentLoading: false,
-          addCommentDone: true
-        };
-      }
-      case ADD_COMMENT_FAILURE:
-        return {
-          ...state,
-          addCommentLoading: false,
-          addCommentError: action.error,
-        };
-      default:
-        return state;
+      draft.addCommentLoading = true;
+      draft.addCommentDone = false;
+      draft.addCommentError = null;
+      break;
+
+    case ADD_COMMENT_SUCCESS: {
+      const post = draft.mainPosts.find((v) => v.id === action.data.postId); // 객체때문에 {} 괄호 사용
+      post.Comments.unshift(dummyComment(action.data.content));
+      draft.addCommentLoading = false;
+      draft.addCommentDone = true;
+      break;
+    }
+
+    case ADD_COMMENT_FAILURE:
+      draft.addCommentLoading = false;
+      draft.addCommentError = action.error;
+      break;
+
+    default:
+      break;
   }
-}
+})
 
 export default reducer;
 

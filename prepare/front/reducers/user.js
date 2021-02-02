@@ -1,3 +1,5 @@
+import produce from 'immer';
+
 export const initialState = {
   logInLoading : false, // 로그인 시도중
   logInDone : false,
@@ -50,14 +52,14 @@ const dummyUser = (data) => ({
   nickname : '이현주',
   id: 1,
   Posts: [{ id: 1}],
-  Followings: [{nickname:'혀주'}, {nickname:'hj lee'}, {nickname: 'hjl'}], //팔로잉 팔로우 수가 3으로 늘음
-  Followers: [{nickname:'혀주'}, {nickname:'hj lee'}, {nickname: 'hjl'}], //팔로잉 팔로우 수가 3으로 늘음
+  Followings: [{nickname:'혀주'}, {nickname:'hj lee'}, {nickname: 'hjl'}],
+  Followers: [{nickname:'혀주'}, {nickname:'hj lee'}, {nickname: 'hjl'}], 
+  //팔로잉 팔로우 수가 3으로 늘음
 })
-//시퀄라이즈에서 합쳐주기 때문에 첫문자는 댓문자로.
+//시퀄라이즈에서 합쳐주기 때문에 첫문자는 대문자로.
 
 
 //어떤 요청이든 이렇게 세 가지 함수가 나온다. *요청 / 성공 / 실패
-// LOGIN-----------------------------------------
 export const loginRequestAction = (data) => {
   return {
     type: LOG_IN_REQUEST,
@@ -72,119 +74,86 @@ export const logoutRequestAction = () => {
   }
 }
 
-const reducer = (state = initialState, action ) => {
-switch (action.type) {
-  //화면에 문제 생길 때 앞으로 데이터 쪽을 유심히 보면된다.
+const reducer = (state = initialState, action ) => produce(state, (draft) => {
+    //produce 이전에 return이 왜 없냐면 바로 => 화살표가 붙을 떄는 사용하지 않아두 된다.
+    switch (action.type) {
+      case LOG_IN_REQUEST:
+        draft.logInLoading=true;
+        draft.logInError=null;
+        draft.logInDone=false;
+        break;
 
-  //로그인
-  case LOG_IN_REQUEST:
-    return {
-        ...state,
-        logInLoading:true,
-        logInError:null,
-        logInDone: false
-    };
+      case LOG_IN_SUCCESS:
+        draft.logInLoading=false;
+        draft.me = dummyUser(action.data);
+        draft.logInDone=true;
+        break;
 
-  case LOG_IN_SUCCESS:
-    return {
-      ...state,
-      logInLoading: false,
-      logInDone:true,
-      me: dummyUser(action.data),
-    };
+      case LOG_IN_FAILURE:
+        draft.logInLoading=false;
+        draft.logInError=action.error;
+        break;
 
-  case LOG_IN_FAILURE:
-    return {
-      ...state,
-      logInLoading: false,
-      logInError:false,
-    }
+      case LOG_OUT_REQUEST:
+        draft.logOutLoading=true;
+        draft.logOutError=null;
+        draft.logOutDone=false;
+        break;
 
-  //----------------------------
-  //로그아웃
-  case LOG_OUT_REQUEST:
-    return {
-      ...state,
-      logOutLoading:true,
-      logOutDone:false,
-      logOutError: null,
-    }
-  case LOG_OUT_SUCCESS:
-    return {
-      ...state,
-      logOutLoading:false,
-      logOutDone:true,
-      me: null
-    }
-  case LOG_OUT_FAILURE:
-    return {
-      ...state,
-      logOutLoading:false, // 요청이 끝났으니까 false
-      logOutError: action.error,
-    }
-  //----------------------------
-  //SIGNUP 회원가입
-  case SIGN_UP_REQUEST:
-    return {
-      ...state,
-      signUpLoading:true,
-      signUpDone:false,
-      signUpError: null,
-    }
-  case SIGN_UP_SUCCESS:
-    return {
-      ...state,
-      signUpLoading:false,
-      signUpDone:true,
-    }
-  case SIGN_UP_FAILURE:
-    return {
-      ...state,
-      signUpLoading:false, // 요청이 끝났으니까 false
-      signUpError: action.error,
-    }
-  //----------------------------
-  //닉네임
-  case CHANGE_NICKNAME_REQUEST:
-    return {
-      ...state,
-      changeNicknameLoading:true,
-      changeNicknameDone:false,
-      changeNicknameError: null,
-    }
-  case CHANGE_NICKNAME_SUCCESS:
-    return {
-      ...state,
-      changeNicknameLoading:false,
-      changeNicknameDone:true,
-    }
-  case CHANGE_NICKNAME_FAILURE:
-    return {
-      ...state,
-      changeNicknameLoading:false, // 요청이 끝났으니까 false
-      changeNicknameError: action.error,
-    }
-  case ADD_POST_TO_ME :
-    return {
-      ...state,
-      me: {
-        ...state.me,
-        Posts: [{ id: action.data}, ...state.me.Posts],
-        //게시글 썻을때 게시글 아이디가 일로 들어와서 하나 더 추가가 될 것이다.
+      case LOG_OUT_SUCCESS:
+        draft.logOutLoading=false;
+        draft.logOutError=true;
+        draft.me=null;
+        break;
+
+      case LOG_OUT_FAILURE:
+        draft.logOutLoading=false;
+        draft.logOutError=action.error;
+        break;
+        
+      case SIGN_UP_REQUEST:
+        draft.signUpLoading=true;
+        draft.signUpDone=false;
+        draft.signUpError=null;
+        break;
+        
+      case SIGN_UP_SUCCESS:
+        draft.signUpLoading=false;
+        draft.signUpDone=true;
+        break;
+
+      case SIGN_UP_FAILURE:
+        draft.signUpLoading=false;
+        draft.signUpError=action.error;
+        break;
+        
+      case CHANGE_NICKNAME_REQUEST:
+        draft.changeNicknameLoading=true;
+        draft.changeNicknameDone=false;
+        draft.changeNicknameError=null;
+        break;
+
+      case CHANGE_NICKNAME_SUCCESS:
+        draft.changeNicknameLoading=false;
+        draft.changeNicknameDone=true;
+        break;
+
+      case CHANGE_NICKNAME_FAILURE:
+        draft.changeNicknameLoading=false;
+        draft.changeNicknameError=action.error;
+        break;
+
+      case ADD_POST_TO_ME :
+        draft.me.Posts.unshift({ id: action.data });
+        break;
+        
+      case REMOVE_POST_OF_ME :
+        draft.me.Posts = draft.me.Posts.filter((v) => v.id !== action.data );
+        break;
+
+      default:
+        break;
       }
-    }
-  case REMOVE_POST_OF_ME :
-    return {
-      ...state,
-      me: {
-        ...state.me,
-        Posts: state.me.Posts.filter((v) => v.id !== action.data),
-        //게시글 썻을때 게시글 아이디가 일로 들어와서 하나 더 추가가 될 것이다.
-      }
-    }
-  default:
-    return state;
-  }
-}
+  });
 
 export default reducer;

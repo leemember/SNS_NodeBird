@@ -601,3 +601,92 @@ const dummyPost = (data) => ({
 더미데이터의 id에는 id:shortId.generate() 이렇게 작성하면 매번 다른 아이디가 생성 될 것이다.
 
 실무에서도 아이디 정하기 애매한 애들은 shortId 사용하면 편리하다.
+
+
+## immer 알아보기
+
+```
+$npm i immer
+```
+
+```
+case ADD_COMMENT_SUCCESS: {
+  const postIndex = state.mainPosts.findIndex((v)=> v.id === action.data.postId);
+  const post = { ...state.mainPosts[postIndex]  };
+  post.Comments = [dummyComment(action.data.content), ...post.Comments];
+  const mainPosts = [...state.mainPosts];
+  mainPosts[postIndex] = post;
+  return {
+    ...state,
+    mainPosts,
+    addCommentLoading: false,
+    addCommentDone: true
+  };
+}
+```
+
+이런식의 불변성 코드의 경우 한끗만 까딱하면 바로 에러나는 애들이다. 이럴 때는 immer라는 라이브러리를 사용하면 효율적으로 코딩할 수 있다.
+불변성코드를 짜는 경우 이 immer 라이브러리는 필수다. 그리고 hooks 버전도 'use-immer'를 사용하면 된다.
+
+사용방법도 간단해서 정말 좋다.
+
+```
+return produce(state, (draft) => {
+
+  });
+```
+이게 기본꼴이다. 이전 상태를 액션을 통해 다음 상태로 만들어내는 함수 (단, 불변성을 지키면서)
+state가 알아서 다음 상태로 불변성 있게 바꿔준다. state를 건들면 안되고 draft만 조작하면 된다.
+
+### **immer의 특징**
+
+- 이걸 사용하면 ... 같은 걸 안봐도 되서 코드가 훨씬 깔끔해진다.
+- 바로 배열에다 넣고 사용하면 된다.
+- 알아서 불변성 지켜서 다음상태를 만들어준다.
+- 코드 보기가 편해진다.
+
+```
+case REMOVE_POST_FAILURE:
+  draft.removePostLoading = false;
+  draft.removePostError = action.error;
+  break;
+```
+break문은 꼭 적어줘야한다. 안적으면 엄청난 일이 일어난다는데 그거까진 모름
+
+```
+case ADD_COMMENT_SUCCESS: {
+  const postIndex = state.mainPosts.findIndex((v)=> v.id === action.data.postId);
+  const post = { ...state.mainPosts[postIndex]  };
+  post.Comments = [dummyComment(action.data.content), ...post.Comments];
+  const mainPosts = [...state.mainPosts];
+  mainPosts[postIndex] = post;
+  return {
+    ...state,
+    mainPosts,
+    addCommentLoading: false,
+    addCommentDone: true
+  };
+}
+ // ------------------------------------------------------------
+ // 이렇게 긴 코드가
+
+case ADD_COMMENT_SUCCESS: {
+      const post = draft.mainPosts.find((v) => v.id === action.data.postId);
+      post.Comments.unshift(dummyComment(action.data.content));
+      draft.addCommentLoading = false;
+      draft.addCommentDone = true;
+      break;
+      
+```
+
+👍🏻 immer를 적용하자 이렇게 간략해짐
+
+```
+const reducer = (state = initialState, action ) => {
+  produce(state, (draft) => {
+    switch (action.type) {
+      case LOG_IN_REQUEST:
+      (...)
+```
+
+produce 이전에 return이 왜 없냐면 바로 => 화살표가 붙을 떄는 사용하지 않아두 된다.

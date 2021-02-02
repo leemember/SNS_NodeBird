@@ -34,7 +34,7 @@ function* logIn(action) {
   } catch (err) {
     yield put({
       type: LOG_IN_FAILURE,
-      error: err.response.data,
+      error: err.response,
     })
   }  
 }
@@ -57,7 +57,7 @@ function* logOut() {
   } catch (err) {
     yield put({
       type: LOG_OUT_FAILURE,
-      error: err.response.data,
+      error: err.response,
     })
   }  
 }
@@ -80,7 +80,7 @@ function* signUp() {
   } catch (err) {
     yield put({
       type: SIGN_UP_FAILURE,
-      error: err.response.data,
+      error: err.response,
     })
   }  
 }
