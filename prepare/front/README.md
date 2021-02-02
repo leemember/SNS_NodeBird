@@ -570,3 +570,34 @@ $npm i -D eslint-plugin-jsx-a11y
 
 a11y는 접근성이라는 뜻이다. 단어가 길어서 그냥 a11y라는 줄임말로 부른다.
 장애인분들을 위한 스크린을 잘 읽어주게 하는지 그런 웹접근성 서비스다.
+
+---
+
+## key값 오류난거 없애기
+
+```
+$npm i shortid
+```
+
+key값은 고유한 네임으로 써야하는데, 이걸 사용하면 겹치기 진짜 어려운 아이디가 나온다.
+
+```
+코드상단에
+🎈 import shortId from 'shortid'; << 추가
+
+const dummyPost = (data) => ({
+  id:shortId.generate(),
+  content: data,
+  User: {
+    id: 1,
+    nickname:'현주리',
+  },
+  Images: [],
+  Comments: [],
+});
+
+```
+
+더미데이터의 id에는 id:shortId.generate() 이렇게 작성하면 매번 다른 아이디가 생성 될 것이다.
+
+실무에서도 아이디 정하기 애매한 애들은 shortId 사용하면 편리하다.

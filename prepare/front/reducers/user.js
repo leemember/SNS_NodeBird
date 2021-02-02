@@ -8,6 +8,9 @@ export const initialState = {
   signUpLoading : false, // 회원가입 시도중
   signUpDone : false,
   signUpError : null,
+  changeNicknameLoading : false, // 닉네임 변경 시도중
+  changeNicknameDone : false,
+  changeNicknameError : null,
   
   me: null,
   signUpData: {},
@@ -26,6 +29,10 @@ export const SIGN_UP_REQUEST = 'SIGN_UP_REQUEST';
 export const SIGN_UP_SUCCESS = 'SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'SIGN_UP_FAILURE';
 
+export const CHANGE_NICKNAME_REQUEST = 'CHANGE_NICKNAME_REQUEST';
+export const CHANGE_NICKNAME_SUCCESS = 'CHANGE_NICKNAME_SUCCESS';
+export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE';
+
 export const FOLLOW_REQUEST = 'FOLLOW_REQUEST';
 export const FOLLOW_SUCCESS = 'FOLLOW_SUCCESS';
 export const FOLLOW_FAILURE = 'FOLLOW_FAILURE';
@@ -39,8 +46,8 @@ const dummyUser = (data) => ({
   nickname : '이현주',
   id: 1,
   Posts: [],
-  Follwings: [],
-  Follwers: [],
+  Followings: [],
+  Followers: [],
 })
 //시퀄라이즈에서 합쳐주기 때문에 첫문자는 댓문자로.
 
@@ -63,6 +70,7 @@ export const logoutRequestAction = () => {
 
 const reducer = (state = initialState, action ) => {
 switch (action.type) {
+  //화면에 문제 생길 때 앞으로 데이터 쪽을 유심히 보면된다.
 
   //로그인
   case LOG_IN_REQUEST:
@@ -130,6 +138,27 @@ switch (action.type) {
       ...state,
       signUpLoading:false, // 요청이 끝났으니까 false
       signUpError: action.error,
+    }
+  //----------------------------
+  //닉네임
+  case CHANGE_NICKNAME_REQUEST:
+    return {
+      ...state,
+      changeNicknameLoading:true,
+      changeNicknameDone:false,
+      changeNicknameError: null,
+    }
+  case CHANGE_NICKNAME_SUCCESS:
+    return {
+      ...state,
+      changeNicknameLoading:false,
+      changeNicknameDone:true,
+    }
+  case CHANGE_NICKNAME_FAILURE:
+    return {
+      ...state,
+      changeNicknameLoading:false, // 요청이 끝났으니까 false
+      changeNicknameError: action.error,
     }
   default:
     return state;

@@ -1,5 +1,5 @@
 import {Form, Input, Button} from 'antd';
-import React, { useCallback } from 'react';
+import React, { useCallback , useEffect} from 'react';
 import useInput from '../hooks/useInput';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ const CommentForm = ({ post }) => {
     const dispatch = useDispatch();
     //게시글 아이디가 있으면 그 아래에 댓글을 달 것이기 때문에 post를 불러갖고 왔다.
     const id = useSelector((state) => state.user.me?.id);
-    const { addCommentDone } = useSelector((state) => state.post);
+    const { addCommentDone, addCommentLoading } = useSelector((state) => state.post);
     const [commentText, onChangeCommentText, setCommentText] = useInput('');
 
     
@@ -20,8 +20,7 @@ const CommentForm = ({ post }) => {
     }, [addCommentDone]);
 
     const onsubmitComment = useCallback(() => {
-        console.log(post.id, commentText);
-        dispatchEvent({
+        dispatch({
           type: ADD_COMMENT_REQUEST,
           data: { content: commentText, postId:post.id, userId: id},
         });
@@ -31,7 +30,12 @@ const CommentForm = ({ post }) => {
         <Form onFinish={onsubmitComment}>
             <Form.Item style={{ position: 'relative', margin: 0 }}>
                 <Input.TextArea value={commentText} onChange={onChangeCommentText} rows={4} />
-                <Button style={{ position: 'absolute', right: 0, bottom: -40}} type="primary" htmlType="submit">삐약</Button>
+                <Button 
+                style={{ position: 'absolute', right: 0, bottom: -40, zIndex: 10}} 
+                type="primary" 
+                htmlType="submit"
+                loading={addCommentLoading}
+                >삐약</Button>
             </Form.Item>
         </Form>
         

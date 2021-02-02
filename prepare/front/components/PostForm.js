@@ -18,11 +18,11 @@ const PostForm = () => {
 
     //짹짹 버튼을 눌렀을 때 게시물일 달리게끔 하는 기능이다. post리듀서에 있는 addPost를 디스패치 시켜주면 된다.
     // 그리고 dispatch 자리에는 원래 객체가 들어가는 것이 맞다.
-    const imageInput = useRef();
     const onSubmit = useCallback(()=> {
-        dispatch(addPost(text));
+      dispatch(addPost(text));
     }, [text]);
-
+    
+    const imageInput = useRef();
     // 이렇게 하면 이미지업로드 버튼을 누르면 사진을 띄울 수가 있다.
     const onClickImageUpload = useCallback(() => {
         imageInput.current.click();
