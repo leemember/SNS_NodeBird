@@ -1,13 +1,15 @@
 import { useState, useCallback } from 'react';
 
-export default (initialValue = null ) => {
-    const [value, setValue] = useState(initialValue);
+const useInput = (initialValue = null ) => {
+  const [value, setValue] = useState(initialValue);
     const handler = useCallback((e) => {
         setValue(e.target.value);
     }, []);
 
     return [value, handler, setValue];
 }
+
+export default useInput;
 
 /*
 state, setState 부분을 이렇게 범용적으로 쓸 수 있도록 바꿔주면 된다.
