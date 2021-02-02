@@ -130,13 +130,12 @@ const reducer = (state = initialState, action ) => {
       case REMOVE_POST_SUCCESS:
         return {
           ...state,
-          mainPosts: ...state.mainPosts.filter((v)=> v.id === action.data),
+          mainPosts: state.mainPosts.filter((v)=> v.id !== action.data),
           removePostLoading: false,
           removePostDone: true
         };
         case REMOVE_POST_FAILURE:
           return {
-            ...state,
             removePostLoading: false,
             removePostError: action.error,
           };

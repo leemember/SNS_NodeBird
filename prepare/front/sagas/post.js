@@ -13,7 +13,7 @@ import {
   REMOVE_POST_FAILURE,
 } from '../reducers/post';
 
-import { ADD_POST_TO_ME } from '../reducers/user';
+import { ADD_POST_TO_ME , REMOVE_POST_OF_ME} from '../reducers/user';
 
 /*
   🎀 사가는 동시에 여러 액션을 디스패치 할 수 있기 때문에
@@ -52,7 +52,7 @@ function* addPost(action) {
 
 // -------removePost---------
 function removePostAPI(data) {
-  return axios.post('/api/post', data); 
+  return axios.delete('/api/post', data); 
 }
 
 function* removePost(action) {  
@@ -68,6 +68,7 @@ function* removePost(action) {
       data: action.data
     }); // 유저 리듀서 상태와 동시에 바꿔준다.
   } catch (err) {
+    console.error(err);
     yield put({
       type: REMOVE_POST_FAILURE,
       data: err.response.data,

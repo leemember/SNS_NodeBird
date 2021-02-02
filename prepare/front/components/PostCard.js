@@ -1,14 +1,17 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, Popover, Avatar, Button, List, Comment} from 'antd';
-import { RetweetOutlined, HeartOutlined, MessageOutlined, EllipsisOutlined, HeartTwoTone } from '@ant-design/icons';
+import { RetweetOutlined, HeartOutlined, MessageOutlined, EllipsisOutlined, HeartTwoTone, PlusOutlined } from '@ant-design/icons';
 
 import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
+import { REMOVE_POST_REQUEST } from '../reducers/post';
 
-const PostCard = ({ post }) => {
+const PostCard = ({ post }) => { 
+const dispatch = useDispatch();
+const { removePostLoading } = useSelector((state) => state.post); //로딩창 돌아가게 하기
 const [ liked, setLiked ] = useState(false);
 const [commentFormOpened, setCommentFormOpened] = useState(false);
 const onToggleLike = useCallback(() => {
@@ -22,6 +25,12 @@ const onToggleComment = useCallback(()=> {
 }, []);
 //위 두개의 toggle 함수에 들어있는 prev는 이전 데이터 기반으로 다음 데이터를 만드는 것이다.
 
+const onRemovePost = useCallback(() => {
+  dispatch({
+    type: REMOVE_POST_REQUEST,
+    data: post.id,
+  });
+}, []);
 
 const id  = useSelector((state) => state.user.me?.id);
 //?. 이 문법은 옵셔널 체이닝 연산자이다. state.user.me?.id
@@ -46,7 +55,7 @@ return (
           // 아이디가 같으면 수정 삭제가 가능하고, 다르면 신고가 가능하게.
         <>
           <Button>수정</Button>
-          <Button type="danger">삭제</Button>
+          <Button type="danger" loading={removePostLoading} onClick={onRemovePost}>삭제</Button>
           {/* type을 danger로 하면 빨간색, primary로 하면 파란색이 된다. */}
           </>
           ) 
