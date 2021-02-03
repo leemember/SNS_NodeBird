@@ -3,77 +3,52 @@ import produce from 'immer';
 import faker from 'faker';
 
 export const initialState = {
-  mainPosts: [{
-    //이 부분은 프론트가 백엔드한테 어떤식으로 개발 한건지 물어보고 협업하는 것이 좋다.
-    id: 1,
-    User: {
-      id: 1,
-      nickname: '현주리',
-    },
-    content: '첫 번째 게시글 #해시태그 #익스프레스',
-    Images: [
-      {
-        id : shortId.generate(),
-        src: 'https://usercontents-c.styleshare.io/images/38020339/640x-',},
-      {
-        id : shortId.generate(),
-        src: 'https://cdn.fanzeel.com/images/201906/5cff5ddc67935.jpg',},
-      {
-        id : shortId.generate(),
-        src: 'https://t1.daumcdn.net/cfile/tistory/1122D22F4C691BB395',},
-  ],
-  Comments: [{
-    id : shortId.generate(),
-    User: {
-      id : shortId.generate(),
-      nickname: 'hyunju'
-    },
-    content: '우와 재밌겠군요~',
-  }, {
-    id : shortId.generate(),
-    User: {
-      id : shortId.generate(), //대문자로 되어있는 애들은 서버에서 주는 애들이라 아이디가 고유하게 붙어있다.
-      nickname: 'lee',
-    },
-    content: '멋있네요'
-  }]
-  //왜 id랑 conent는 앞에 글자가 소문자인데 그 나머지들은 왜 대문자냐면 이것은 시퀄라이즈와 연관이 있다.
-  // 다른 정보와 관련이 있는 데이터면 그 정보를 한 번에 합쳐준다. 합쳐줄 때는 대문자가 되어 나온다.
-  }],
+  mainPosts: [],
   imagePaths: [], // 이미지 업로드 할 때 이미지 경로들이 저장되는 곳이다.
-  addPostLoading: false, // 게시될 것들이 추가가 완료됐을 때
+  hasMorePost: true, //데이터를 더이상 불러올 게 없을 때 
+
+  loadPostsLoading: false,
+  loadPostsDone: false,
+  loadPostsError: null,
+
+  addPostLoading: false,
   addPostDone: false,
   addPostError: null,
+
   addCommentLoading: false, 
   addCommentDone: false,
   addCommentError: null,
+
   removePostLoading: false, 
   removePostDone: false,
   removePostError: null,
 }
 
+//인피니트 스크롤링. 스크롤을 내릴 때마다 새로운 게시물이 나타나도록 하는 기능이다.
 //반복문으로 faker를 사용해서 이름을 지어낸다.
-//concat을 사용 할 때는 항상 앞에 이렇게 대입을 해줘야한다.
-initialState.mainPosts = initialState.mainPosts.concat(
-  Array(20).fill().map(() => ({
+export const generateDummyPost = (number) => Array(number).fill().map(() => ({
+  id: shortId.generate(),
+  User: {
     id: shortId.generate(),
+    nickname: faker.name.findName(),
+  },
+  content: faker.lorem.paragraph(),
+  Images: [{
+    src: faker.image.image(),
+  }],
+  Comments: [{
     User: {
-      id: shortId.generate(),
-      nickname: faker.name.findName(),
+      id : shortId.generate(),
+      nickname: faker.name.findName()
     },
-    content: faker.lorem.paragraph(),
-    Images: [{
-      src: faker.image.imageUrl(),
-    }],
-    Comments: [{
-      User: {
-        id : shortId.generate(),
-        nickname: faker.name.findName()
-      },
-      content: faker.lorem.sentence(),
-    }],
-  }))
-);
+    content: faker.lorem.sentence(),
+  }],
+}))
+
+//화면 로딩
+export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
+export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
+export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
 
 //게시글 추가
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
@@ -126,6 +101,28 @@ const dummyComment = (data) => ({
 // immer : 이전 상태를 액션을 통해 다음 상태로 만들어내는 함수 (불변성은 지키면서)
 const reducer = (state = initialState, action ) => produce(state, (draft) => {
   switch (action.type) {
+
+    //로딩
+    case LOAD_POSTS_REQUEST:
+      draft.loadPostsLoading = true;
+      draft.loadPostsDone = false;
+      draft.loadPostsError = null;
+      break;
+
+    case LOAD_POSTS_SUCCESS:
+      draft.loadPostsLoading = false;
+      draft.loadPostsDone = true;
+      draft.mainPosts = action.data.concat(draft.mainPosts);
+      draft.hasMorePosts = draft.mainPosts.length < 50; 
+      // 50개보다 적으면 true 50개보다 많으면 false. 그러니 딱 50개만 보겠다는 뜻이다.
+      break;
+
+    case LOAD_POSTS_FAILURE:
+      draft.loadPostsLoading = false;
+      draft.loadPostsError = action.error;
+      break;
+
+    //포스트 추가
     case ADD_POST_REQUEST:
       draft.addPostLoading = true;
       draft.addPostDone = false;

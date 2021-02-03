@@ -690,3 +690,31 @@ const reducer = (state = initialState, action ) => {
 ```
 
 produce 이전에 return이 왜 없냐면 바로 => 화살표가 붙을 떄는 사용하지 않아두 된다.
+
+<br />
+
+----
+
+<br>
+
+## faker 란 ?
+
+> 이름 짓기 귀찮을 때 쓰면 좋다.
+
+```
+$npm i faker
+```
+
+> placeholder.com <br>
+> lorempixel.com
+>> 더미 이미지 쓸 때 좋다.
+
+백엔드랑 협업하기 위해서 이런 것들을 미리미리 센스있게 만들어 줘야 좋다.
+
+> redux-toolkit | https://redux-toolkit.js.org/
+
+프론트 개발자하려면 더미데이터를 수천개 띄우고서도 화면에 렉이 걸리지 않는 모습을 보여주면
+면접관들한테 엄청 인상깊게 남는다.
+
+인피니트 스크롤링 구현해보고, react-virtualized 구현해보기
+> react-virtualized | https://github.com/bvaughn/react-virtualized

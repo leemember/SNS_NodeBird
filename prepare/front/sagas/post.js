@@ -1,6 +1,6 @@
 import axios from 'axios';
 import shortId from 'shortid';
-import { all, delay, put, takeLatest, fork} from "redux-saga/effects";
+import { all, delay, put, takeLatest, fork, throttle} from "redux-saga/effects";
 import { 
   ADD_POST_SUCCESS, 
   ADD_POST_FAILURE, 
@@ -11,6 +11,10 @@ import {
   REMOVE_POST_REQUEST,
   REMOVE_POST_SUCCESS,
   REMOVE_POST_FAILURE,
+  LOAD_POSTS_REQUEST,
+  LOAD_POSTS_SUCCESS,
+  LOAD_POSTS_FAILURE,
+  generateDummyPost
 } from '../reducers/post';
 
 import { ADD_POST_TO_ME , REMOVE_POST_OF_ME} from '../reducers/user';
@@ -19,6 +23,27 @@ import { ADD_POST_TO_ME , REMOVE_POST_OF_ME} from '../reducers/user';
   🎀 사가는 동시에 여러 액션을 디스패치 할 수 있기 때문에
   어떤 동작이 여러 리듀서의 데이터를 동시에 수정해야 한다면, 액션을 여러번 호출해주면 된다.  
 */
+
+// -------loadPost---------
+function loadPostsAPI(data) {
+  return axios.post('/api/posts', data); 
+}
+
+function* loadPosts(action) {  
+  try {
+    // const result = yield call(loadPostsAPI, action.data);
+    yield delay(1000);
+    yield put({
+      type: LOAD_POSTS_SUCCESS, 
+      data: generateDummyPost(10),
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_POSTS_FAILURE,
+      data: err.response.data,
+    })
+  }  
+}
 
 // -------addPost---------
 function addPostAPI(data) {
@@ -32,7 +57,7 @@ function* addPost(action) {
     // 🤯 서버 구현하기 전까지 delay 사용하는걸로
     const id = shortId.generate();
     yield put({
-      type: ADD_POST_SUCCESS,
+      type: ADD_POST_SUCCESS, 
       data: {
         id,
         content: action.data,
@@ -98,6 +123,10 @@ function* addComment(action) {
   }  
 }
 
+function* watchLoadPosts() {
+  yield throttle(5000, LOAD_POSTS_REQUEST, loadPosts);
+}
+
 function* watchAddPost() {
   yield takeLatest(ADD_POST_REQUEST, addPost);
 }
@@ -113,6 +142,7 @@ function* watchAddComment() {
 export default function* postSaga() {
   yield all([
     fork(watchAddPost),
+    fork(watchLoadPosts),
     fork(watchRemovePost),
     fork(watchAddComment),
   ])
