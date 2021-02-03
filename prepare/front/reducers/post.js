@@ -51,6 +51,7 @@ export const initialState = {
   removePostError: null,
 }
 
+//게시글 추가
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
@@ -71,6 +72,7 @@ export const addPost = (data) => ({
     type: ADD_POST_REQUEST,
     data,
 })
+
 export const addComment = (data) => ({
     type: ADD_COMMENT_REQUEST,
     data,
@@ -109,7 +111,7 @@ const reducer = (state = initialState, action ) => produce(state, (draft) => {
     case ADD_POST_SUCCESS:
       draft.addPostLoading = false;
       draft.addPostDone = true;
-      draft.mainPosts = unshift(dummyComment(action.data));
+      draft.mainPosts.unshift(dummyPost(action.data));
       break;
 
     case ADD_POST_FAILURE:
