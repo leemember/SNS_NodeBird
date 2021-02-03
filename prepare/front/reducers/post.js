@@ -1,5 +1,6 @@
 import shortId from 'shortid';
 import produce from 'immer';
+import faker from 'faker';
 
 export const initialState = {
   mainPosts: [{
@@ -50,6 +51,29 @@ export const initialState = {
   removePostDone: false,
   removePostError: null,
 }
+
+//반복문으로 faker를 사용해서 이름을 지어낸다.
+//concat을 사용 할 때는 항상 앞에 이렇게 대입을 해줘야한다.
+initialState.mainPosts = initialState.mainPosts.concat(
+  Array(20).fill().map(() => ({
+    id: shortId.generate(),
+    User: {
+      id: shortId.generate(),
+      nickname: faker.name.findName(),
+    },
+    content: faker.lorem.paragraph(),
+    Images: [{
+      src: faker.image.imageUrl(),
+    }],
+    Comments: [{
+      User: {
+        id : shortId.generate(),
+        nickname: faker.name.findName()
+      },
+      content: faker.lorem.sentence(),
+    }],
+  }))
+);
 
 //게시글 추가
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
