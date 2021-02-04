@@ -1,13 +1,43 @@
-const http = require('http');
-const server = http.createServer((req, res) => {
-  console.log(req.url, req.method);
-  res.write('hello node 01');
-  res.write('hello node 02');
-  res.write('hello node 03');
-  res.write('hello node 04');
-  res.end('Hello node 05');
+const express = require('express');
+
+const app = express();
+
+/* 
+app.get : 가져오다
+app.post : 생성하다 
+app.put : 전체 수정
+app.delete : 제거
+app.patch : 부분 수정
+app.options :찔러보기
+app.head : 헤더만 가져오기 (헤더/바디)
+*/
+
+app.get('/', (req, res) => {
+  res.send('helloe express');
 });
-server.listen(3065, () => {
-  console.log('서버 실행 중');
+
+app.get('/api', (req, res) => {
+  res.send('hello api');
 });
-// 노드 런타임이 이 코드를 실행해준다.
+
+app.get('/api/posts', (req, res) => {
+  res.json([
+    {id : 1, content: 'hello'},
+    {id : 2, content: 'hello2'},
+    {id : 3, content: 'hello3'},
+  ])
+})
+
+app.post('/api/post', (req, res) => {
+  res.json({ id : 1, content: 'hello'});
+});
+
+app.delete('/api/post', (req,res) => {
+  res.json({ id : 1 });
+})
+
+app.listen(3065, () => {
+  console.log('서버 실행중');
+})
+
+//위에 코드들을 라우터라고 부르는데 라우터들을 분리해줄수도 있다.
