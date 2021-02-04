@@ -8,6 +8,7 @@ import PostImages from './PostImages';
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
 import { REMOVE_POST_REQUEST } from '../reducers/post';
+import FollowButton from './FollowButton';
 
 const PostCard = ({ post }) => { 
 const dispatch = useDispatch();
@@ -66,6 +67,7 @@ return (
           {/* 얘는 더보기 버튼이다. */}
       </Popover>,
     ]}
+    extra={id && <FollowButton post={post}/>} // 로그인을 해야 팔로우버튼이 보이게하려면 id && 넣어주기.
 >
 <Card.Meta 
     avatar={<Avatar>{post.User.nickname[0]}</Avatar>}

@@ -10,7 +10,13 @@ import {
   LOG_OUT_FAILURE,
   SIGN_UP_SUCCESS, 
   SIGN_UP_REQUEST, 
-  SIGN_UP_FAILURE
+  SIGN_UP_FAILURE,
+  FOLLOW_REQUEST,
+  FOLLOW_SUCCESS,
+  FOLLOW_FAILURE,
+  UNFOLLOW_REQUEST,
+  UNFOLLOW_SUCCESS,
+  UNFOLLOW_FAILURE,
 } from '../reducers/user';
 
 // -------로그인---------
@@ -34,7 +40,7 @@ function* logIn(action) {
   } catch (err) {
     yield put({
       type: LOG_IN_FAILURE,
-      error: err.response,
+      error: err.response.data,
     })
   }  
 }
@@ -57,7 +63,7 @@ function* logOut() {
   } catch (err) {
     yield put({
       type: LOG_OUT_FAILURE,
-      error: err.response,
+      error: err.response.data,
     })
   }  
 }
@@ -70,7 +76,7 @@ function signUpAPI() {
 
 function* signUp() {  
   try {
-    // const result = yield call(signUp);
+    // const result = yield call(signUpAPI);
     yield delay(1000);
     // 🤯 서버 구현하기 전까지 delay 사용하는걸로
     // throw new Error(''); throw를 하면 에러날 때 바로 밑에 put함수를 적용해주는 것이 아니라 catch(err)로 간다.
@@ -80,9 +86,67 @@ function* signUp() {
   } catch (err) {
     yield put({
       type: SIGN_UP_FAILURE,
-      error: err.response,
+      error: err.response.data,
     })
   }  
+}
+
+// ------------------------------------------------
+
+function followAPI() {
+  return axios.post('/api/follow'); 
+}
+
+function* follow(action) {  
+  try {
+    // const result = yield call(followAPI);
+    yield delay(1000);
+    // 🤯 서버 구현하기 전까지 delay 사용하는걸로
+    // throw new Error(''); throw를 하면 에러날 때 바로 밑에 put함수를 적용해주는 것이 아니라 catch(err)로 간다.
+    yield put({
+      type: FOLLOW_SUCCESS,
+      data: action.data,
+    });
+  } catch (err) {
+    yield put({
+      type: FOLLOW_FAILURE,
+      error: err.response.data,
+    })
+  }  
+}
+
+// ------------------------------------------------
+
+function unfollowAPI() {
+  return axios.post('/api/unfollow'); 
+}
+
+function* unfollow(action) {  
+  try {
+    // const result = yield call(unfollowAPI);
+    yield delay(1000);
+    // 🤯 서버 구현하기 전까지 delay 사용하는걸로
+    // throw new Error(''); throw를 하면 에러날 때 바로 밑에 put함수를 적용해주는 것이 아니라 catch(err)로 간다.
+    yield put({
+      type: UNFOLLOW_SUCCESS,
+      data: action.data,
+    });
+  } catch (err) {
+    yield put({
+      type: UNFOLLOW_FAILURE,
+      error: err.response.data,
+    })
+  }  
+}
+
+// ------------------------------------------------
+
+function* watchFollow() {
+  yield takeLatest(FOLLOW_REQUEST, follow);
+}
+
+function* watchUnfollow() {
+  yield takeLatest(UNFOLLOW_REQUEST, unfollow);
 }
 
 //LOG_IN이란 액션이 실행되면 뒤에있는 logIn 제너레이터 함수가 실행되도록
@@ -100,6 +164,8 @@ function* watchSignUp() {
 
 export default function* userSaga() {
   yield all([
+    fork(watchFollow),
+    fork(watchUnfollow),
     fork(watchLogIn),
     fork(watchLogOut),
     fork(watchSignUp),

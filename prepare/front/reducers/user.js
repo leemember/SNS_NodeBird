@@ -1,6 +1,12 @@
 import produce from 'immer';
 
 export const initialState = {
+  followLoading : false, // 팔로우 시도중
+  followDone : false,
+  followError : null,
+  unfollowLoading : false, // 언팔로우 시도중
+  unfollowDone : false,
+  unfollowError : null,
   logInLoading : false, // 로그인 시도중
   logInDone : false,
   logInError : null,
@@ -69,7 +75,7 @@ export const loginRequestAction = (data) => {
 
 export const logoutRequestAction = () => {
   return {
-    type: SIGN_UP_REQUEST,
+    type: LOG_OUT_REQUEST,
     // 로그아웃은 데이터가 필요 없으니 DATA를 없애도 된다.
   }
 }
@@ -77,6 +83,40 @@ export const logoutRequestAction = () => {
 const reducer = (state = initialState, action ) => produce(state, (draft) => {
     //produce 이전에 return이 왜 없냐면 바로 => 화살표가 붙을 떄는 사용하지 않아두 된다.
     switch (action.type) {
+      case UNFOLLOW_REQUEST:
+        draft.unfollowLoading=true;
+        draft.unfollowError=null;
+        draft.unfollowDone=false;
+        break;
+
+      case UNFOLLOW_SUCCESS:
+        draft.unfollowLoading=false;
+        draft.me.Followings = draft.me.Followings.filter((v) => v.id !== action.data ); // 언팔로우 한 한사람만 제거된다.
+        draft.unfollowDone=true;
+        break;
+
+      case UNFOLLOW_FAILURE:
+        draft.unfollowLoading=false;
+        draft.unfollowError=action.error;
+        break;
+
+      case FOLLOW_REQUEST:
+        draft.followLoading=true;
+        draft.followError=null;
+        draft.followDone=false;
+        break;
+
+      case FOLLOW_SUCCESS:
+        draft.followLoading=false;
+        draft.me.Followings.push({id:action.data});
+        draft.followDone=true;
+        break;
+
+      case FOLLOW_FAILURE:
+        draft.followLoading=false;
+        draft.followError=action.error;
+        break;
+
       case LOG_IN_REQUEST:
         draft.logInLoading=true;
         draft.logInError=null;
