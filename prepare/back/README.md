@@ -90,7 +90,7 @@ app.get('/', (req, res) => {
 
 <br>
 
-> MySQL 응용프로그램을 다운받았고나면 밑에 라이브러리 설치
+> MySQL 응용프로그램을 세팅 후 밑에 라이브러리 설치
 
 ```
 $npm i sequelize sequelize-cli mysql2
