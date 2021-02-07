@@ -1,15 +1,25 @@
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', { // mysql에는 users 테이블 생성
+  const Post = sequelize.define('Post', { 
     // 아이디가 기본적으로 들어있다.
-    email: {},
-    nickname: {},
-    password: {},
+  content: {
+    type: DataTypes.TEXT,
+    allowNull : false,
+    },
+    // RetweetId
   }, {
-    charset: 'utf8',
-    collate: 'utf8_general_ci', // 한글 저장
+    charset: 'utf8mp4',
+    collate: 'utf8mp4_general_ci', // 이모티콘을 넣으려면 mp4도 넣어주어야한다.
   });
 
-  User.associate = (db) => {};
-  return User;
+  Post.associate = (db) => {
+    db.Post.belongsTo(db.User); //어떤 게시글이 작성자한테 속해있다.
+    db.Post.belongsToMany(db.Hashtag ,{ through: 'PostHashtag'}); //다대다 관계
+    db.Post.hasMany(db.Comment);
+    db.Post.hasMany(db.Image);
+    db.Post.belongsTo(db.Post);
+    db.Post.belongsToMany(db.User, { through: 'Like', as : 'Likers'});
+    db.Post.belongsTo(db.Post, {as : 'Retweet'});
+  };
+
+  return Post;
 }
-// 이걸 시퀄라이즈에서는 모델이라 부르는데 이게 기본꼴이다.
