@@ -107,3 +107,16 @@ $npm i sequelize sequelize-cli mysql2
 ```
 $npx sequelize init
 ```
+
+시퀄라이즈를 설치하고 나면 config에다가 개발, 테스트, 배포용의 json이 들어있다.
+
+```
+"development": {
+    "username": "root",
+    "password": "nodejsbook",
+    "database": "react-nodebird",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }, 
+```
+이 부분이 config이다.
