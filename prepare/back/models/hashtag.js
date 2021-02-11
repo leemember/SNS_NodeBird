@@ -1,17 +1,23 @@
-module.exports = (sequelize, DataTypes) => {
-  const Hashtag = sequelize.define('Hashtag', { 
-    // 아이디가 기본적으로 들어있다.
-  name: {
-    type: DataTypes.STRING(20),
-    allowNull : false,
-    },
-  }, {
-    charset: 'utf8mp4',
-    collate: 'utf8mp4_general_ci', // 이모티콘을 넣으려면 mp4도 넣어주어야한다.
-  });
+const DataTypes = require('sequelize');
+const { Model } = DataTypes;
 
-  Hashtag.associate = (db) => {
-    db.Hashtag.belongsToMany(db.Hashtag); //다대다 관계
-  };
-  return Hashtag;
-}
+module.exports = class Hashtag extends Model {
+  static init(sequelize) {
+    return super.init({
+      // id가 기본적으로 들어있다.
+      name: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+      },
+    }, {
+      modelName: 'Hashtag',
+      tableName: 'hashtags',
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_general_ci', // 이모티콘 저장
+      sequelize,
+    });
+  }
+  static associate(db) {
+    db.Hashtag.belongsToMany(db.Post, { through: 'PostHashtag' });
+  }
+};

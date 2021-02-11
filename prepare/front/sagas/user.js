@@ -1,4 +1,4 @@
-import { all, fork, takeLatest, put, delay} from 'redux-saga/effects';
+import { all, fork, takeLatest, put, delay, call} from 'redux-saga/effects';
 import axios from 'axios';
 
 import {
@@ -30,8 +30,7 @@ function* logIn(action) {
   try {
     console.log('saga login');
     //요청의 결과를 받다.
-    //const result = yield call(logInAPI);
-    yield delay(1000);
+    const result = yield call(logInAPI);
     // 🤯 서버 구현하기 전까지 delay 사용하는걸로
     yield put({
       type: LOG_IN_SUCCESS, //성공시
@@ -70,15 +69,14 @@ function* logOut() {
 
 // ------------------------------------------------
 
-function signUpAPI() {
-  return axios.post('/api/signUp'); 
+function signUpAPI(data) {
+  return axios.post('http://localhost:3065/user', data); 
 }
 
-function* signUp() {  
+function* signUp(action) {  
   try {
-    // const result = yield call(signUpAPI);
-    yield delay(1000);
-    // 🤯 서버 구현하기 전까지 delay 사용하는걸로
+    const result = yield call(signUpAPI, action.data);
+    console.log(result);
     // throw new Error(''); throw를 하면 에러날 때 바로 밑에 put함수를 적용해주는 것이 아니라 catch(err)로 간다.
     yield put({
       type: SIGN_UP_SUCCESS,
