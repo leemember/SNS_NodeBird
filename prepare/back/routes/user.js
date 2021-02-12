@@ -7,6 +7,7 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
+//미들웨어를 확장하는 방법이다.
 router.get('/', async (req, res, next) => { // GET /user
     try {
       if (req.user) {
@@ -72,7 +73,7 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
       })
       return res.status(200).json(fullUserWithoutPassword);
     });
-  })(req, res, next);
+  })(req, res, next); // express 기법중 하나다.
 });
 
 router.post('/', isNotLoggedIn, async (req, res, next) => { // POST /user/

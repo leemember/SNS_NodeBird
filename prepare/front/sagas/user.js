@@ -21,20 +21,18 @@ import {
 
 // -------로그인---------
 function logInAPI(data) {
-  return axios.post('/api/login', data); 
+  return axios.post('/user/login', data); 
 }
 
 //action 이 매개변수는, action.type하면 로그인 request가 나올거고 action.data하면 로그인 데이터가 있다.
 function* logIn(action) {
   //요청이 항상 성공하는 것이 아니라 실패할 수도 있으니 실패한 상황도 try/catch문으로 만들어준다.
   try {
-    console.log('saga login');
-    //요청의 결과를 받다.
-    const result = yield call(logInAPI);
-    // 🤯 서버 구현하기 전까지 delay 사용하는걸로
+    const result = yield call(logInAPI, action.data);
+
     yield put({
       type: LOG_IN_SUCCESS, //성공시
-      data: action.data, //데이터를 받아온다.
+      data: result.data, //데이터를 받아온다.
     });
   } catch (err) {
     yield put({
@@ -47,15 +45,14 @@ function* logIn(action) {
 // -------로그아웃---------
 // 로그아웃은 매개변수 넣는 곳에 따로 필요한 데이터가 없다.
 
-function logOutAPI() {
-  return axios.post('/api/logOut'); 
+function logOutAPI(data) {
+  return axios.post('/user/logout'); 
 }
 
-function* logOut() {  
+function* logOut(action) {  
   try {
-    // const result = yield call(logOutAPI);
-    yield delay(1000);
-    // 🤯 서버 구현하기 전까지 delay 사용하는걸로
+    const result = yield call(logOutAPI);
+
     yield put({
       type: LOG_OUT_SUCCESS,
     });
@@ -70,7 +67,7 @@ function* logOut() {
 // ------------------------------------------------
 
 function signUpAPI(data) {
-  return axios.post('http://localhost:3065/user', data); 
+  return axios.post('/user', data); 
 }
 
 function* signUp(action) {  

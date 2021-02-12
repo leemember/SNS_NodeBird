@@ -3,10 +3,13 @@ const local = require('./local');
 const { User } = require('../models');
 
 module.exports = () => {
+
+  //설정 1
   passport.serializeUser((user, done) => { // 서버쪽에 [{ id: 1, cookie: 'clhxy' }]
     done(null, user.id);
   });
 
+  //설정 2
   passport.deserializeUser(async (id, done) => {
     try {
       const user = await User.findOne({ where: { id }});
