@@ -17,7 +17,31 @@ import {
   UNFOLLOW_REQUEST,
   UNFOLLOW_SUCCESS,
   UNFOLLOW_FAILURE,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
+  LOAD_USER_FAILURE,
 } from '../reducers/user';
+
+// -------로그인---------
+function loadUserAPI() {
+  return axios.get('/user' ); 
+}
+
+function* loadUser(action) {
+  try {
+    const result = yield call(loadUserAPI, action.data);
+
+    yield put({
+      type: LOAD_USER_SUCCESS, //성공시
+      data: result.data, //데이터를 받아온다.
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_USER_FAILURE,
+      error: err.response.data,
+    })
+  }  
+}
 
 // -------로그인---------
 function logInAPI(data) {
@@ -135,6 +159,10 @@ function* unfollow(action) {
 
 // ------------------------------------------------
 
+function* watchLoadUser() {
+  yield takeLatest(LOAD_USER_REQUEST, loadUser);
+}
+
 function* watchFollow() {
   yield takeLatest(FOLLOW_REQUEST, follow);
 }
@@ -158,6 +186,7 @@ function* watchSignUp() {
 
 export default function* userSaga() {
   yield all([
+    fork(watchLoadUser),
     fork(watchFollow),
     fork(watchUnfollow),
     fork(watchLogIn),

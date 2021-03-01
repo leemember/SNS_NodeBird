@@ -1,6 +1,9 @@
 import produce from 'immer';
 
 export const initialState = {
+  loadUserLoading : false, // 유저 정보 가져오기 시도중
+  loadUserDone : false,
+  loadUserError : null,
   followLoading : false, // 팔로우 시도중
   followDone : false,
   followError : null,
@@ -24,6 +27,10 @@ export const initialState = {
   signUpData: {},
   loginData: {},
 }
+
+export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
+export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
 
 export const LOG_IN_REQUEST = 'LOG_IN_REQUEST';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
@@ -83,6 +90,23 @@ export const logoutRequestAction = () => {
 const reducer = (state = initialState, action ) => produce(state, (draft) => {
     //produce 이전에 return이 왜 없냐면 바로 => 화살표가 붙을 떄는 사용하지 않아두 된다.
     switch (action.type) {
+      case LOAD_USER_REQUEST:
+        draft.loadUserLoading=true;
+        draft.loadUserError=null;
+        draft.loadUserDone=false;
+        break;
+
+      case LOAD_USER_SUCCESS:
+        draft.loadUserLoading=false;
+        draft.me = action.data;
+        draft.loadUserDone=true;
+        break;
+
+      case LOAD_USER_FAILURE:
+        draft.loadUserLoading=false;
+        draft.loadUserError=action.error;
+        break;
+
       case UNFOLLOW_REQUEST:
         draft.unfollowLoading=true;
         draft.unfollowError=null;

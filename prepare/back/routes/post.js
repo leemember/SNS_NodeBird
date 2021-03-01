@@ -52,6 +52,7 @@ router.post('/', isLoggedIn, upload.none(), async (req, res, next) => { // POST 
     }
     const fullPost = await Post.findOne({
       where: { id: post.id },
+      //이미지, 댓글, 유저는 한꺼번에 include로 묶어서 해결
       include: [{
         model: Image,
       }, {

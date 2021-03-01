@@ -1,10 +1,9 @@
 const express = require('express');
 const { Op } = require('sequelize');
-
 const { Post, Image, User, Comment } = require('../models');
-
 const router = express.Router();
 
+// 여러개 가져오는 작업 = posts
 router.get('/', async (req, res, next) => { // GET /posts
   try {
     const where = {};
@@ -14,6 +13,7 @@ router.get('/', async (req, res, next) => { // GET /posts
     const posts = await Post.findAll({
       where,
       limit: 10,
+      //사용자정보와 작성자 정보 둘 다 가져오기.
       order: [
         ['createdAt', 'DESC'],
         [Comment, 'createdAt', 'DESC'],

@@ -1,6 +1,6 @@
-import shortId from 'shortid';
+// import shortId from 'shortid';
+// import faker from 'faker';
 import produce from 'immer';
-import faker from 'faker';
 
 export const initialState = {
   mainPosts: [],
@@ -24,26 +24,26 @@ export const initialState = {
   removePostError: null,
 }
 
-//인피니트 스크롤링. 스크롤을 내릴 때마다 새로운 게시물이 나타나도록 하는 기능이다.
-//반복문으로 faker를 사용해서 이름을 지어낸다.
-export const generateDummyPost = (number) => Array(number).fill().map(() => ({
-  id: shortId.generate(),
-  User: {
-    id: shortId.generate(),
-    nickname: faker.name.findName(),
-  },
-  content: faker.lorem.paragraph(),
-  Images: [{
-    src: faker.image.image(),
-  }],
-  Comments: [{
-    User: {
-      id : shortId.generate(),
-      nickname: faker.name.findName()
-    },
-    content: faker.lorem.sentence(),
-  }],
-}))
+// //인피니트 스크롤링. 스크롤을 내릴 때마다 새로운 게시물이 나타나도록 하는 기능이다.
+// //반복문으로 faker를 사용해서 이름을 지어낸다.
+// export const generateDummyPost = (number) => Array(number).fill().map(() => ({
+//   id: shortId.generate(),
+//   User: {
+//     id: shortId.generate(),
+//     nickname: faker.name.findName(),
+//   },
+//   content: faker.lorem.paragraph(),
+//   Images: [{
+//     src: faker.image.image(),
+//   }],
+//   Comments: [{
+//     User: {
+//       id : shortId.generate(),
+//       nickname: faker.name.findName()
+//     },
+//     content: faker.lorem.sentence(),
+//   }],
+// }))
 
 //화면 로딩
 export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
