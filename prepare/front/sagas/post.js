@@ -1,6 +1,6 @@
 import axios from 'axios';
 import shortId from 'shortid';
-import { all, delay, put, takeLatest, fork, throttle} from "redux-saga/effects";
+import { all, delay, put, takeLatest, fork, throttle, call} from "redux-saga/effects";
 import { 
   ADD_POST_SUCCESS, 
   ADD_POST_FAILURE, 
@@ -25,19 +25,20 @@ import { ADD_POST_TO_ME , REMOVE_POST_OF_ME} from '../reducers/user';
 */
 
 // -------loadPost---------
-function loadPostsAPI(data) {
-  return axios.post('/api/posts', data); 
+function loadPostsAPI(lastId) {
+  return axios.get(`/posts?lastId=${lastId || 0}`);
 }
 
 function* loadPosts(action) {  
   try {
-    // const result = yield call(loadPostsAPI, action.data);
+    const result = yield call(loadPostsAPI, action.lastId);
     yield delay(1000);
     yield put({
       type: LOAD_POSTS_SUCCESS, 
-      data: generateDummyPost(10),
+      data: result.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: LOAD_POSTS_FAILURE,
       data: err.response.data,
@@ -47,30 +48,26 @@ function* loadPosts(action) {
 
 // -------addPost---------
 function addPostAPI(data) {
-  return axios.post('/api/post', data); 
+  return axios.post('/post', {content: data}); 
 }
 
 function* addPost(action) {  
   try {
-    // const result = yield call(addPostAPI, action.data);
-    yield delay(1000);
-    // 🤯 서버 구현하기 전까지 delay 사용하는걸로
+    const result = yield call(addPostAPI, action.data);
     const id = shortId.generate();
     yield put({
-      type: ADD_POST_SUCCESS, 
-      data: {
-        id,
-        content: action.data,
-      }
+      type: ADD_POST_SUCCESS,
+      data: result.data,
     });
     yield put({
       type: ADD_POST_TO_ME,
-      data: id,
-    })
+      data: result.data.id,
+    });
   } catch (err) {
+    console.error(err);
     yield put({
       type: ADD_POST_FAILURE,
-      data: err.response,
+      error: err.response.data,
     })
   }  
 }
@@ -96,21 +93,19 @@ function* removePost(action) {
     console.error(err);
     yield put({
       type: REMOVE_POST_FAILURE,
-      data: err.response,
+      data: err.response.data,
     })
   }  
 }
 
 // -------addComment---------
 function addCommentAPI(data) {
-  return axios.post('/api/post/${data.postId}/comment', data); 
+  return axios.post('/posr/${data.postId}/comment', data); // POST /post/1/comment
 }
 
 function* addComment(action) {  
   try {
-    // const result = yield call(addCommentAPI, action.data);
-    yield delay(1000);
-    // 🤯 서버 구현하기 전까지 delay 사용하는걸로
+    yield result = yield call(addCommentAPI, action.data);
     yield put({
       type: ADD_COMMENT_SUCCESS,
       data: action.data,

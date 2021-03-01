@@ -39,6 +39,7 @@ router.get('/', async (req, res, next) => { // GET /user
   }
 });
 
+//로그인 안한 사람들만 할 수 있다.
 router.post('/login', isNotLoggedIn, (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
@@ -99,12 +100,14 @@ router.post('/', isNotLoggedIn, async (req, res, next) => { // POST /user/
   }
 });
 
+//로그아웃
 router.post('/logout', isLoggedIn, (req, res) => {
   req.logout();
   req.session.destroy();
   res.send('ok');
 });
 
+//닉네임
 router.patch('/nickname', isLoggedIn, async (req, res, next) => {
   try {
     await User.update({
