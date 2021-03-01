@@ -7,6 +7,7 @@ import userSaga from './user';
 
 // 이렇게 base를 이 주소로 했기 때문에 기본적으로 이 포트번호가 붙는다.
 axios.defaults.baseURL = 'http://localhost:3065';
+axios.defaults.withCredentials = true;
 
 export default function* rootSaga() {
   yield all([

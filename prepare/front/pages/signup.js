@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'; 
+import React, { useCallback, useState, useEffect } from 'react'; 
 import Head from 'next/head';
 import { Form, Input, Checkbox, Button } from 'antd';
 import AppLayout from '../components/AppLayout';
@@ -19,6 +19,7 @@ const Signup = () => {
     useEffect(() => {
       if (me && me.id) {
         Router.replace('/');
+        // 뒤로가기 했을 때 그 페이지가 나오지 않도록 할려면 push보다 replace 사용하는 것이 더 좋다.
       }
     }, [me && me.id]);
   
