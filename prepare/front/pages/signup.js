@@ -13,7 +13,27 @@ const ErrorMsg = styled.div`
 
 const Signup = () => {
     const dispatch = useDispatch();
-    const { signUpLoading } = useSelector((state) => state.user);
+    const { signUpLoading, signUpDone, signUpError, me  } = useSelector((state) => state.user);
+
+    //로그인이 성공했다면 회원가입 페이지에서 나가도록 해준다.
+    useEffect(() => {
+      if (me && me.id) {
+        Router.replace('/');
+      }
+    }, [me && me.id]);
+  
+    useEffect(() => {
+      if (signUpDone) {
+        Router.replace('/');
+      }
+    }, [signUpDone]);
+  
+    useEffect(() => {
+      if (signUpError) {
+        alert(signUpError);
+      }
+    }, [signUpError]);
+  
 
     const [email, onChangeEmail] = useInput('');
     const [nickname, onChangeNickname] = useInput('');

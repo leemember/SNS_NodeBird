@@ -4,24 +4,24 @@ dotenv.config();
 
 module.exports = {
   development: {
-    username: 'root',
+    username: 'dbmasteruser',
     password: process.env.DB_PASSWORD,
-    database: 'react-nodebird',
-    host: '127.0.0.1',
+    database: 'leehyunju',
+    host: 'ls-5e1f6dc6cda34ee3ff0a83dddc17e6772c6fe068.cpd3bfmvavpa.ap-northeast-2.rds.amazonaws.com',
     dialect: 'mysql',
   },
   test: {
-    username: 'root',
+    username: 'dbmasteruser',
     password: process.env.DB_PASSWORD,
-    database: 'react-nodebird',
-    host: '127.0.0.1',
+    database: 'leehyunju',
+    host: 'ls-5e1f6dc6cda34ee3ff0a83dddc17e6772c6fe068.cpd3bfmvavpa.ap-northeast-2.rds.amazonaws.com',
     dialect: 'mysql',
   },
   production: {
-    username: 'root',
+    username: 'dbmasteruser',
     password: process.env.DB_PASSWORD,
-    database: 'react-nodebird',
-    host: '127.0.0.1',
+    database: 'leehyunju',
+    host: 'ls-5e1f6dc6cda34ee3ff0a83dddc17e6772c6fe068.cpd3bfmvavpa.ap-northeast-2.rds.amazonaws.com',
     dialect: 'mysql',
   },
 };

@@ -45,14 +45,13 @@ function* logIn(action) {
 // -------로그아웃---------
 // 로그아웃은 매개변수 넣는 곳에 따로 필요한 데이터가 없다.
 
-function logOutAPI(data) {
+function logOutAPI() {
   return axios.post('/user/logout'); 
 }
 
-function* logOut(action) {  
+function* logOut() {  
   try {
-    const result = yield call(logOutAPI);
-
+    yield call(logOutAPI);
     yield put({
       type: LOG_OUT_SUCCESS,
     });
