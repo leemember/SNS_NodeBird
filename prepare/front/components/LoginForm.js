@@ -9,51 +9,51 @@ import useInput from '../hooks/useInput';
 import { loginRequestAction } from '../reducers/user';
 
 const ButtonWrapper = styled.div`
-    margin-top: 10px;
+  margin-top: 10px;
 `;
 
 const FormWrapper = styled(Form)`
-    padding: 10px;
+  padding: 10px;
 `;
 
 const LoginForm = () => {
-    const dispatch = useDispatch();
-    const { logInLoading } = useSelector((state) => state.user);
-    const [email, onChangeEmail] = useInput('');
-    const [password, onChangePassword] = useInput('');
-    //커스텀훅으로 간단하게 처리함. 보기도 편하다.
+  const dispatch = useDispatch();
+  const { logInLoading } = useSelector((state) => state.user);
+  const [email, onChangeEmail] = useInput('');
+  const [password, onChangePassword] = useInput('');
+  //커스텀훅으로 간단하게 처리함. 보기도 편하다.
 
-    const onSubmitForm = useCallback(() => {
-        console.log(email, password);
-        dispatch(loginRequestAction({ email, password })); // 데이터 가져오기.
-    }, [email, password]);
+  const onSubmitForm = useCallback(() => {
+    console.log(email, password);
+    dispatch(loginRequestAction({ email, password })); // 데이터 가져오기.
+  }, [email, password]);
 
-    return (
-        <FormWrapper onFinish={onSubmitForm}>
-            <div>
-                <label htmlFor="user-email">이메일</label>
-                <br />
-                <Input name="user-email" type="email" value={email} onChange={onChangeEmail} required />
-            </div>
+  return (
+    <FormWrapper onFinish={onSubmitForm}>
+      <div>
+        <label htmlFor="user-email">이메일</label>
+        <br />
+        <Input name="user-email" type="email" value={email} onChange={onChangeEmail} required />
+      </div>
 
-            <div>
-                <label htmlFor="user-password">비밀번호</label>
-                <br />
-                <Input 
-                    name="user-password"
-                    type="password" 
-                    value={password} 
-                    onChange={onChangePassword} 
-                    required 
-                    />
-            </div>
+      <div>
+        <label htmlFor="user-password">비밀번호</label>
+        <br />
+        <Input name="user-password" type="password" value={password} onChange={onChangePassword} required />
+      </div>
 
-            <ButtonWrapper>
-                <Button type="primary" htmlType="submit" loading={logInLoading}>로그인</Button>
-                <Link href="/signup"><a><Button>회원가입</Button></a></Link>
-            </ButtonWrapper>
-        </FormWrapper>
-    );
-}
+      <ButtonWrapper>
+        <Button type="primary" htmlType="submit" loading={logInLoading}>
+          로그인
+        </Button>
+        <Link href="/signup">
+          <a>
+            <Button>회원가입</Button>
+          </a>
+        </Link>
+      </ButtonWrapper>
+    </FormWrapper>
+  );
+};
 
 export default LoginForm;

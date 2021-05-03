@@ -7,12 +7,12 @@ export const Overlay = styled.div`
   z-index: 5000;
   top: 0;
   left: 0;
-  rigth: 0;
-  bottom:0;
+  right: 0;
+  bottom: 0;
 `;
 
 export const Header = styled.header`
-  height:44px;
+  height: 44px;
   background: white;
   position: relative;
   padding: 0;
@@ -20,7 +20,7 @@ export const Header = styled.header`
 
   & h1 {
     margin: 0;
-    font-size:17px;
+    font-size: 17px;
     color: #333;
     line-height: 44px;
   }
@@ -28,8 +28,8 @@ export const Header = styled.header`
 
 export const CloseBtn = styled(CloseOutlined)`
   position: absolute;
-  right:0;
-  top:0;
+  right: 0;
+  top: 0;
   padding: 15px;
   line-height: 14px;
   cursor: pointer;
